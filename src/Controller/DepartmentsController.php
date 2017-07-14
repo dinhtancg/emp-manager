@@ -76,5 +76,6 @@ class DepartmentsController extends AppController
             $this->Flash->error(__('Permission denied'));
             $this->redirect(['controller'=> 'departments', 'action'=> 'view',$id]);
         }
+        // TODO
     }
 }
