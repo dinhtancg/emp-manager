@@ -36,7 +36,6 @@ class UsersController extends AppController
                     return $this->redirect($this->Auth->redirectUrl());
                 }
             }
-
             $this->Flash->error(__('Invalid username or password, please try again!'));
         }
     }
@@ -155,6 +154,11 @@ class UsersController extends AppController
             $this->redirect(['controller'=> 'users', 'action'=> 'view',$id]);
         }
     }
+
+    /**
+     * Implement process reset password
+     * @return [type] [description]
+     */
     public function password()
     {
         if ($this->request->is('post')) {
@@ -168,11 +172,18 @@ class UsersController extends AppController
                 $timeout = time()+ DAY;
                 if ($this->Users->updateAll(['passkey' => $passkey, 'timeout' => $timeout], ['id' => $user->id])) {
                     $this->sendResetEmail($url, $user);
-                    $this->Flash->error('Error saving reset passke/ timeout');
+                } else {
+                    $this->Flash->error('Error saving reset passkey/ timeout');
                 }
             }
         }
     }
+
+    /**
+     * Send email to user for reset password
+     * @param string $url  Link reset password
+     * @param  $user
+     */
     private function sendResetEmail($url, $user)
     {
         $email = new Email();
@@ -188,6 +199,10 @@ class UsersController extends AppController
             $this->Flash->error(__('Error sending email :'). $email->smtpError);
         }
     }
+    /**
+     * [reset password medthod]
+     * @param [type] $passkey [description]
+     */
     public function reset($passkey = null)
     {
         if ($passkey) {
@@ -196,7 +211,7 @@ class UsersController extends AppController
             if ($user) {
                 if (!empty($this->request->data)) {
                     //Clear passkey and timeout
-            $this->request->data['passkey'] = null;
+                    $this->request->data['passkey'] = null;
                     $this->request->data['timeout'] = null;
                     $user= $this->Users->patchEntity($user, $this->request->data);
                     if ($this->Users->save($user)) {
