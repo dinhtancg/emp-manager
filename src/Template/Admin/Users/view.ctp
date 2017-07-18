@@ -27,14 +27,6 @@
             <td><?= h($user->role) ?></td>
         </tr>
         <tr>
-            <th><?= __('Department') ?></th>
-            <td><?= $user->has('department_id') ? $this->Html->link($user->department->name, ['controller' => 'Departments', 'action' => 'view', $user->department->id]) : '' ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Job')?></th>
-            <td><?= h($user->job)?></td>
-        </tr>
-        <tr>
             <th><?= __('First Login') ?></th>
             <td><?= h($user->first_login) ?></td>
         </tr>

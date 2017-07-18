@@ -19,7 +19,6 @@ class UsersController extends AppController
      */
     public function index()
     {
-        $this->paginate = ['contain' => ['Departments']];
         $users = $this->paginate($this->Users);
 
         $this->set(compact('users'));
@@ -36,7 +35,7 @@ class UsersController extends AppController
     public function view($id = null)
     {
         $user = $this->Users->get($id, [
-            'contain' => ['Departments']
+            'contain' => ['']
         ]);
 
         $this->set('user', $user);
@@ -53,26 +52,34 @@ class UsersController extends AppController
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->data);
+            // debug(  $this->request->data['avatar']);
+            // debug(  $this->request->data['base64-avatar']);
+            // die;
+            //send email
             $mail =  $this->request->data('email');
             $subject = 'Account login system!';
             $message = 'Hi ' .$this->request->data('username'). '. Your information:
               Username :'.$this->request->data('username').',
               password: '. $this->request->data('password').'.
               Welcome!!!';
-            if ($this->Users->save($user)) {
-                $email = new Email();
-                $email->from(['tanhd070695@gmail.com'=>'Rikkeisoft'])
-                    ->to($mail)
-                    ->subject($subject)
-                    ->send($message);
-                $this->Flash->success(__('The user has been saved.'));
-                return $this->redirect(['action' => 'index']);
+            if ($user->uploadAvatar($this->request->data['base64-avatar'], $this->request->data['avatar'])) {
+                if ($this->Users->save($user)) {
+                    $user->uploadAvatar($avatar);
+                    $email = new Email();
+                    $email->from(['tanhd070695@gmail.com'=>'Rikkeisoft'])
+                      ->to($mail)
+                      ->subject($subject)
+                      ->send($message);
+                    $this->Flash->success(__('The user has been saved.'));
+                    return $this->redirect(['action' => 'index']);
+                } else {
+                    $this->Flash->error(__('The user could not be saved. Please, try again.'));
+                }
             } else {
-                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+                $this->Flash->error(__('The avatar could not be saved. please try again.'));
             }
         }
-        $departments = $this->Users->Departments->find('list');
-        $this->set(compact('user', 'departments'));
+        $this->set(compact('user'));
         $this->set('_serialize', ['user']);
     }
 
@@ -97,8 +104,7 @@ class UsersController extends AppController
                 $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
         }
-        $departments = $this->Users->Departments->find('list');
-        $this->set(compact('user', 'departments'));
+        $this->set(compact('user'));
         $this->set('_serialize', ['user']);
     }
 

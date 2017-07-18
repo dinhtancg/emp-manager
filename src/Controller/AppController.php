@@ -86,8 +86,8 @@ class AppController extends Controller
         }
 
         // Only admins can access admin functions
-        if ($this->request->param('prefix') === 'admin') {
-            return (bool)($user['role'] === 'admin');
+        if ($this->request->param('prefix') == 'admin') {
+            return (bool)($user['role']);
         }
 
         // Default deny

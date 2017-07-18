@@ -29,7 +29,11 @@ class UsersTable extends Table
         $this->displayField('id');
         $this->primaryKey('id');
         $this->addBehavior('Timestamp');
-        $this->belongsTo('Departments', ['foreignKey' => 'department_id']);
+        $this->belongsToMany('Departments', [
+            'foreignKey' => 'user_id',
+            'targetForeignKey' => 'department_id',
+            'joinTable' => 'departments_users'
+        ]);
     }
 
     /**
@@ -72,18 +76,17 @@ class UsersTable extends Table
                     'rule' => [$this, 'checkCharacters'],
                     'message' => 'The password must contain 1 number, 1 uppercase, 1 lowercase, and 1 special character'
                 ]);
-
+        $validator
+              ->requirePresence('dob', 'create')
+              ->notEmpty('dob', 'You must enter your dob', 'create');
+        $validator
+                    ->requirePresence('avatar', 'create')
+                    ->notEmpty('avatar', 'You must choose your avatar!', 'create');
         $validator
             ->requirePresence('role', 'create')
             ->notEmpty('role')
             ->add('role', 'inList', [
-              'rule'=> ['inList', ['admin','user']],
-              'message' => 'Please enter a valid role'
-            ]);
-        $validator
-            ->allowEmpty('job')
-            ->add('job', 'inList', [
-              'rule'=> ['inList', ['manager','employee']],
+              'rule'=> ['inList', ['1','0']],
               'message' => 'Please enter a valid role'
             ]);
         $validator

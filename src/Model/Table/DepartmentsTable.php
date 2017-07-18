@@ -28,8 +28,10 @@ class DepartmentsTable extends Table
         $this->table('departments');
         $this->displayField('name');
         $this->primaryKey('id');
-        $this->hasMany('Users', [
-            'foreignKey' => 'department_id'
+        $this->belongsToMany('Users', [
+            'foreignKey' => 'department_id',
+            'targetForeignKey' => 'user_id',
+            'joinTable' => 'departments_users'
         ]);
         $this->addBehavior('Timestamp');
     }

@@ -30,7 +30,7 @@ class UsersController extends AppController
                 $this->Auth->setUser($user);
                 if ($this->Auth->user('first_login') == 0) {
                     return $this->redirect(['controller' => 'users', 'action'=>'changePassword']);
-                } elseif ($this->Auth->user('role') === 'admin') {
+                } elseif ($this->Auth->user('role')) {
                     return $this->redirect(['prefix'=>'admin','controller' => 'users', 'action' => 'index']);
                 } else {
                     return $this->redirect($this->Auth->redirectUrl());
