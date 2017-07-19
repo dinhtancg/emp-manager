@@ -13,17 +13,14 @@
     <h3><?= h($department->name) ?></h3>
     <table class="vertical-table">
         <tr>
-            <th><?= __('Name') ?></th>
-            <td><?= h($department->name) ?></td>
-        </tr>
-        <tr>
             <th><?= __('Id') ?></th>
             <td><?= $this->Number->format($department->id) ?></td>
         </tr>
         <tr>
-            <th><?= __('User Id') ?></th>
-            <td><?= $this->Number->format($department->user_id) ?></td>
+            <th><?= __('Name') ?></th>
+            <td><?= h($department->name) ?></td>
         </tr>
+
     </table>
     <div class="related">
         <h4><?= __('List Users of Department') ?></h4>

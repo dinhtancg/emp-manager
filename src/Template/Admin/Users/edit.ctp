@@ -17,16 +17,14 @@
         <?php
             echo $this->Form->input('username');
             echo $this->Form->input('email');
-            echo $this->Form->input('password');
+            echo $this->Form->input('dob', ['type'=>'date']);
+            echo $this->Form->input('gender', [
+              'options' => ['men' =>'Men', 'women' => 'Women','other'=>'Other'],
+              'selected' => $user->gender
+            ]);
             echo $this->Form->input('role', [
-              'options' => ['admin' =>'Admin', 'user' => 'User']
-            ]);
-            echo $this->Form->input('department_id', [
-              'empty'  => 'No Departments'
-            ]);
-            echo $this->Form->input('job', [
-              'options' => ['manager' =>'Manager', 'employee' => 'Employee'],
-              'empty' => 'Do not have a job'
+              'options' => ['admin' =>'Admin', 'user' => 'User'],
+              'selected' =>$user->role
             ]);
         ?>
     </fieldset>

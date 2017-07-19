@@ -14,8 +14,18 @@
             echo $this->Form->input('password');
             echo $this->Form->input('confirm_password', ['type'=>'password']);
             echo $this->Form->input('dob', ['type'=>'date']);
+            echo $this->Form->input('gender', [
+              'options' => ['men' =>'Men', 'women' => 'Women','other'=>'Other']
+            ]);
             echo $this->Form->input('role', [
-              'options' => ['1' =>'Admin', '0' => 'User']
+              'options' => ['1' =>'Admin', '0' => 'User'],
+              'required'=> true
+            ]);
+            echo $this->Form->input('department_id', [
+              'required'=> true
+            ]);
+            echo $this->Form->input('position', [
+              'options' => ['manager' =>'Manager', 'employee' => 'Employee']
             ]);
             echo $this->Form->input('base64-avatar', ['type' => 'hidden']);
             echo $this->Form->input('avatar', ['type' =>'file', 'onchange' => 'previewFile()']);
@@ -31,14 +41,6 @@
       var preview = document.querySelector('img');
       var file    = document.querySelector('input[type=file]').files[0];
       var reader  = new FileReader();
-
-      //  reader.onload = function (e) {
-      //     $('#pre_img').attr('src',e.target.result);
-      //     var data=e.target.result;
-      //     var extension=data.substring(data.indexOf('/')+1,data.indexOf(';base64'));
-      //     $('#base64-avatar').val(extension+"-"+data);
-      //     console.log($('#base64-avatar').val());
-      //  };
       reader.addEventListener("load", function () {
           preview.src = reader.result;
           $('#base64-avatar').val(reader.result);
@@ -48,6 +50,5 @@
         if (file) {
           reader.readAsDataURL(file);
         }
-      //  reader.readAsDataURL(file);
      }
   </script>

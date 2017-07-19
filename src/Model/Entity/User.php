@@ -49,8 +49,9 @@ class User extends Entity
     }
     public function uploadAvatar($avatar, $fileName)
     {
-        define('UPLOAD_DIR', '../uploads/');
         $avatar = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $avatar));
-        file_put_contents(UPLOAD_DIR.$fileName, $avatar);
+        if (file_put_contents(UPLOAD_DIR.$fileName, $avatar)) {
+            return true;
+        }
     }
 }

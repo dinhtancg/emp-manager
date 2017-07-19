@@ -11,6 +11,10 @@
     <h3><?= h($user->id) ?></h3>
     <table class="vertical-table">
         <tr>
+          <th><?= __('Avatar')?></th>
+          <th><img src="<?= '/img/uploads/'.$user->avatar?>" alt="Avatar" width="50px" height="50px" style="float:right"></th>
+        </tr>
+        <tr>
             <th><?= __('Username') ?></th>
             <td><?= h($user->username) ?></td>
         </tr>
@@ -19,16 +23,8 @@
             <td><?= h($user->email) ?></td>
         </tr>
         <tr>
-            <th><?= __('Password') ?></th>
-            <td><?= h($user->password) ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Role') ?></th>
-            <td><?= h($user->role) ?></td>
-        </tr>
-        <tr>
-            <th><?= __('First Login') ?></th>
-            <td><?= h($user->first_login) ?></td>
+            <th><?= __('Gender') ?></th>
+            <td><?= h($user->gender) ?></td>
         </tr>
         <tr>
             <th><?= __('Id') ?></th>
