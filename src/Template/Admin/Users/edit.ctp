@@ -8,6 +8,8 @@
             )
         ?></li>
         <li><?= $this->Html->link(__('List Users'), ['action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('List Departments'), ['controller' => 'Departments', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('New Department'), ['controller' => 'Departments', 'action' => 'add']) ?></li>
     </ul>
 </nav>
 <div class="users form large-9 medium-8 columns content">
@@ -17,15 +19,16 @@
         <?php
             echo $this->Form->input('username');
             echo $this->Form->input('email');
-            echo $this->Form->input('dob', ['type'=>'date']);
+            echo $this->Form->input('password');
+            echo $this->Form->input('dob');
             echo $this->Form->input('gender', [
-              'options' => ['men' =>'Men', 'women' => 'Women','other'=>'Other'],
-              'selected' => $user->gender
+              'options' => ['men' =>'Men', 'women' => 'Women','other'=>'Other']
             ]);
             echo $this->Form->input('role', [
-              'options' => ['admin' =>'Admin', 'user' => 'User'],
-              'selected' =>$user->role
+              'options' => ['1' =>'Admin', '0' => 'User'],
+              'required'=> true
             ]);
+            echo $this->Form->input('departments._ids', ['options' => $departments]);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

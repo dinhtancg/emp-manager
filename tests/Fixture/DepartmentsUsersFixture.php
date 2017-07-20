@@ -50,8 +50,8 @@ class DepartmentsUsersFixture extends TestFixture
             'department_id' => 1,
             'user_id' => 1,
             'position' => 'Lorem ipsum dolor sit amet',
-            'created' => '2017-07-18 04:37:10',
-            'modified' => '2017-07-18 04:37:10'
+            'created' => '2017-07-18 07:05:30',
+            'modified' => '2017-07-18 07:05:30'
         ],
     ];
 }

@@ -1,22 +1,22 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\DepartmentsTable;
+use App\Model\Table\UsersTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\DepartmentsTable Test Case
+ * App\Model\Table\UsersTable Test Case
  */
-class DepartmentsTableTest extends TestCase
+class UsersTableTest extends TestCase
 {
 
     /**
      * Test subject
      *
-     * @var \App\Model\Table\DepartmentsTable
+     * @var \App\Model\Table\UsersTable
      */
-    public $Departments;
+    public $Users;
 
     /**
      * Fixtures
@@ -24,8 +24,8 @@ class DepartmentsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.departments',
         'app.users',
+        'app.departments',
         'app.departments_users'
     ];
 
@@ -37,8 +37,8 @@ class DepartmentsTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::exists('Departments') ? [] : ['className' => 'App\Model\Table\DepartmentsTable'];
-        $this->Departments = TableRegistry::get('Departments', $config);
+        $config = TableRegistry::exists('Users') ? [] : ['className' => 'App\Model\Table\UsersTable'];
+        $this->Users = TableRegistry::get('Users', $config);
     }
 
     /**
@@ -48,7 +48,7 @@ class DepartmentsTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Departments);
+        unset($this->Users);
 
         parent::tearDown();
     }
@@ -69,6 +69,16 @@ class DepartmentsTableTest extends TestCase
      * @return void
      */
     public function testValidationDefault()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test buildRules method
+     *
+     * @return void
+     */
+    public function testBuildRules()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

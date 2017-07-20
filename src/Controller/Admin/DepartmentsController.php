@@ -2,6 +2,7 @@
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 /**
  * Departments Controller
@@ -18,9 +19,6 @@ class DepartmentsController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-          'contain' => ['Users']
-      ];
         $departments = $this->paginate($this->Departments);
 
         $this->set(compact('departments'));
@@ -61,7 +59,8 @@ class DepartmentsController extends AppController
                 $this->Flash->error(__('The department could not be saved. Please, try again.'));
             }
         }
-        $this->set(compact('department'));
+        $users = $this->Departments->Users->find('list', ['limit' => 200]);
+        $this->set(compact('department', 'users'));
         $this->set('_serialize', ['department']);
     }
 
@@ -75,7 +74,7 @@ class DepartmentsController extends AppController
     public function edit($id = null)
     {
         $department = $this->Departments->get($id, [
-            'contain' => []
+            'contain' => ['Users']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $department = $this->Departments->patchEntity($department, $this->request->data);
@@ -86,7 +85,8 @@ class DepartmentsController extends AppController
                 $this->Flash->error(__('The department could not be saved. Please, try again.'));
             }
         }
-        $this->set(compact('department'));
+        $users = $this->Departments->Users->find('list', ['limit' => 200]);
+        $this->set(compact('department', 'users'));
         $this->set('_serialize', ['department']);
     }
 

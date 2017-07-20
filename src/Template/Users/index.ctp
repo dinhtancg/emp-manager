@@ -1,39 +1,51 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <?php if ($user->job == 'manager'): ?>
-          <li><?php echo $this->Html->link('My employees', array('controller' => 'departments', 'action' => 'view', $user->department->id)); ?><li>
-        <?php endif; ?>
-        <li><?= $this->Html->link(__('Change Profile'), ['action' => 'edit', $user->id]) ?> </li>
-        <li><?php echo $this->Html->link('Change Password', array('controller' => 'users', 'action' => 'changePassword')); ?></li>
+        <li><?= $this->Html->link(__('New User'), ['action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('List Departments'), ['controller' => 'Departments', 'action' => 'index']) ?></li>
+        <li><?= $this->Html->link(__('New Department'), ['controller' => 'Departments', 'action' => 'add']) ?></li>
     </ul>
 </nav>
-<div class="users view large-9 medium-8 columns content">
-    <h3><?= 'Profile Of '.h($user->username) ?></h3>
-    <table class="vertical-table">
-        <tr>
-            <th><?= __('Username') ?></th>
-            <td><?= h($user->username) ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Email') ?></th>
-            <td><?= h($user->email) ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Role') ?></th>
-            <td><?= h($user->role) ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Department') ?></th>
-            <td><?= $user->has('department_id') ? $this->Html->link($user->department->name, ['controller' => 'Departments', 'action' => 'view', $user->department->id]) : '' ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Job')?></th>
-            <td><?= h($user->job)?></td>
-        </tr>
-        <tr>
-            <th><?= __('Id') ?></th>
-            <td><?= $this->Number->format($user->id) ?></td>
-        </tr>
+<div class="users index large-9 medium-8 columns content">
+    <h3><?= __('Users') ?></h3>
+    <table cellpadding="0" cellspacing="0">
+        <thead>
+            <tr>
+                <th><?= $this->Paginator->sort('id') ?></th>
+                <th><?= $this->Paginator->sort('username') ?></th>
+                <th><?= $this->Paginator->sort('email') ?></th>
+                <th><?= $this->Paginator->sort('password') ?></th>
+                <th><?= $this->Paginator->sort('dob') ?></th>
+                <th><?= $this->Paginator->sort('avatar') ?></th>
+                <th><?= $this->Paginator->sort('role') ?></th>
+                <th class="actions"><?= __('Actions') ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($users as $user): ?>
+            <tr>
+                <td><?= $this->Number->format($user->id) ?></td>
+                <td><?= h($user->username) ?></td>
+                <td><?= h($user->email) ?></td>
+                <td><?= h($user->password) ?></td>
+                <td><?= h($user->dob) ?></td>
+                <td><?= h($user->avatar) ?></td>
+                <td><?= h($user->role) ?></td>
+                <td class="actions">
+                    <?= $this->Html->link(__('View'), ['action' => 'view', $user->id]) ?>
+                    <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id]) ?>
+                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
     </table>
+    <div class="paginator">
+        <ul class="pagination">
+            <?= $this->Paginator->prev('< ' . __('previous')) ?>
+            <?= $this->Paginator->numbers() ?>
+            <?= $this->Paginator->next(__('next') . ' >') ?>
+        </ul>
+        <p><?= $this->Paginator->counter() ?></p>
+    </div>
 </div>

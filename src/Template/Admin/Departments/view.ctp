@@ -13,33 +13,41 @@
     <h3><?= h($department->name) ?></h3>
     <table class="vertical-table">
         <tr>
+            <th><?= __('Name') ?></th>
+            <td><?= h($department->name) ?></td>
+        </tr>
+        <tr>
             <th><?= __('Id') ?></th>
             <td><?= $this->Number->format($department->id) ?></td>
         </tr>
         <tr>
-            <th><?= __('Name') ?></th>
-            <td><?= h($department->name) ?></td>
+            <th><?= __('Created') ?></th>
+            <td><?= h($department->created) ?></td>
         </tr>
-
+        <tr>
+            <th><?= __('Modified') ?></th>
+            <td><?= h($department->modified) ?></td>
+        </tr>
     </table>
     <div class="related">
-        <h4><?= __('List Users of Department') ?></h4>
+        <h4><?= __('Related Employyes') ?></h4>
         <?php if (!empty($department->users)): ?>
         <table cellpadding="0" cellspacing="0">
             <tr>
-                <th><?= __('Id') ?></th>
                 <th><?= __('Username') ?></th>
                 <th><?= __('Email') ?></th>
-                <th><?= __('Job') ?></th>
-
+                <th><?= __('Dob') ?></th>
+                <th><?= __('Avatar') ?></th>
+                <th><?= __('Role') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($department->users as $users): ?>
             <tr>
-                <td><?= h($users->id) ?></td>
                 <td><?= h($users->username) ?></td>
                 <td><?= h($users->email) ?></td>
-                <td><?= h($users->job) ?></td>
+                <td><?= h($users->dob) ?></td>
+                <td><img src="<?= '/img/uploads/'.$users->avatar?>" alt="Avatar" width="50px" height="50px"></td>
+                <td><?= h($users->role) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['controller' => 'Users', 'action' => 'view', $users->id]) ?>
 

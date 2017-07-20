@@ -6,11 +6,11 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use Cake\Auth\DefaultPasswordHasher;
 
 /**
  * Users Model
  *
+ * @property \Cake\ORM\Association\BelongsToMany $Departments
  */
 class UsersTable extends Table
 {
@@ -26,9 +26,11 @@ class UsersTable extends Table
         parent::initialize($config);
 
         $this->table('users');
-        $this->displayField('id');
+        $this->displayField('username');
         $this->primaryKey('id');
+
         $this->addBehavior('Timestamp');
+
         $this->belongsToMany('Departments', [
             'foreignKey' => 'user_id',
             'targetForeignKey' => 'department_id',
@@ -36,7 +38,7 @@ class UsersTable extends Table
         ]);
     }
 
-    /**
+        /**
      * Default validation rules.
      *
      * @param \Cake\Validation\Validator $validator Validator instance.
@@ -88,13 +90,6 @@ class UsersTable extends Table
             ->add('role', 'inList', [
               'rule'=> ['inList', ['1','0']],
               'message' => 'Please enter a valid role'
-            ]);
-        $validator
-            ->requirePresence('position', 'create')
-            ->notEmpty('position')
-            ->add('position', 'inList', [
-              'rule'=> ['inList', ['manager','employee']],
-              'message' => 'Please enter a valid position.'
             ]);
         $validator
             ->requirePresence('gender', 'create')

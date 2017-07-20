@@ -11,9 +11,18 @@ use Cake\Auth\DefaultPasswordHasher;
  * @property string $username
  * @property string $email
  * @property string $password
- * @property string $role
- * @property \Cake\I18n\Time $created_at
- * @property \Cake\I18n\Time $updated_at
+ * @property \Cake\I18n\Time $dob
+ * @property string $avatar
+ * @property bool $role
+ * @property bool $first_login
+ * @property bool $login_failse
+ * @property \Cake\I18n\Time $time_ban
+ * @property string $pass_key
+ * @property \Cake\I18n\Time $timeout
+ * @property \Cake\I18n\Time $created
+ * @property \Cake\I18n\Time $modified
+ * @property bool $flag_delete
+ * @property \App\Model\Entity\Department[] $departments
  */
 class User extends Entity
 {
@@ -41,12 +50,23 @@ class User extends Entity
         'password'
     ];
 
+    /**
+     * Hash password
+     * @param type $password
+     * @return type hash password
+     */
     protected function _setPassword($password)
     {
         if (strlen($password) > 0) {
             return (new DefaultPasswordHasher)->hash($password);
         }
     }
+    /**
+     * Upload image avatar check
+     * @param type $avatar
+     * @param type $fileName
+     * @return boolean
+     */
     public function uploadAvatar($avatar, $fileName)
     {
         $avatar = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $avatar));

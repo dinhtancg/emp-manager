@@ -12,6 +12,7 @@
         <legend><?= __('Add Department') ?></legend>
         <?php
             echo $this->Form->input('name');
+            echo $this->Form->input('users._ids', ['options' => $users]);
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

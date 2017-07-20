@@ -2,8 +2,6 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
-use Cake\Routing\Router;
-use Cake\Mailer\Email;
 
 /**
  * Users Controller
@@ -13,6 +11,101 @@ use Cake\Mailer\Email;
 class UsersController extends AppController
 {
 
+    /**
+     * Index method
+     *
+     * @return \Cake\Network\Response|null
+     */
+    public function index()
+    {
+        $users = $this->paginate($this->Users);
+
+        $this->set(compact('users'));
+        $this->set('_serialize', ['users']);
+    }
+
+    /**
+     * View method
+     *
+     * @param string|null $id User id.
+     * @return \Cake\Network\Response|null
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
+     */
+    public function view($id = null)
+    {
+        $user = $this->Users->get($id, [
+            'contain' => ['Departments']
+        ]);
+
+        $this->set('user', $user);
+        $this->set('_serialize', ['user']);
+    }
+
+    /**
+     * Add method
+     *
+     * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
+     */
+    public function add()
+    {
+        $user = $this->Users->newEntity();
+        if ($this->request->is('post')) {
+            $user = $this->Users->patchEntity($user, $this->request->data);
+            if ($this->Users->save($user)) {
+                $this->Flash->success(__('The user has been saved.'));
+                return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            }
+        }
+        $departments = $this->Users->Departments->find('list', ['limit' => 200]);
+        $this->set(compact('user', 'departments'));
+        $this->set('_serialize', ['user']);
+    }
+
+    /**
+     * Edit method
+     *
+     * @param string|null $id User id.
+     * @return \Cake\Network\Response|void Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     */
+    public function edit($id = null)
+    {
+        $user = $this->Users->get($id, [
+            'contain' => ['Departments']
+        ]);
+        if ($this->request->is(['patch', 'post', 'put'])) {
+            $user = $this->Users->patchEntity($user, $this->request->data);
+            if ($this->Users->save($user)) {
+                $this->Flash->success(__('The user has been saved.'));
+                return $this->redirect(['action' => 'index']);
+            } else {
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
+            }
+        }
+        $departments = $this->Users->Departments->find('list', ['limit' => 200]);
+        $this->set(compact('user', 'departments'));
+        $this->set('_serialize', ['user']);
+    }
+
+    /**
+     * Delete method
+     * @param  [type] $id [description]
+     * @return [type]    user can not delete user
+     */
+    public function delete($id = null)
+    {
+        if ($id == $this->request->session()->read('Auth.User.id') && $this->request->session()->read('Auth.User.role') != 'admin') {
+            $this->Flash->error(__('Permission denied'));
+            $this->redirect(['controller'=> 'users', 'action'=> 'view',$id]);
+        }
+        if ($id != $this->request->session()->read('Auth.User.id')) {
+            $this->Flash->error(__('You can not edit profile of this user!'));
+            $this->redirect(['controller'=> 'users', 'action'=> 'view',$id]);
+        }
+    }
+    
     /**
      * Login method
      *
@@ -48,7 +141,8 @@ class UsersController extends AppController
     {
         return $this->redirect($this->Auth->logout());
     }
-     /**
+    
+    /**
       * [changePassword method]
       * @return [type] [description]
       */
@@ -79,82 +173,7 @@ class UsersController extends AppController
         }
         $this->set('user', $user);
     }
-
-    /**
-     * Index method
-     *
-     * @return \Cake\Network\Response|null
-     */
-    public function index()
-    {
-        $user =$this->Users->get($this->Auth->user('id'));
-        $user = $this->Users->get($this->Auth->user('id'), [
-          'contain' => ['Departments']
-      ]);
-        $this->set('user', $user);
-        $this->set('_serialize', ['user']);
-    }
-
-
-     /**
-      * View user information
-      * @param  [type] $id [description]
-      * @return [type]     [description]
-      */
-     public function view($id = null)
-     {
-         $user = $this->Users->get($id, [
-             'contain' => ['Departments']
-         ]);
-
-         $this->set('user', $user);
-         $this->set('_serialize', ['user']);
-     }
-   /**
-    * Edit user information method
-    * @param  [type] $id [description]
-    * @return [type]     [description]
-    */
-    public function edit($id = null)
-    {
-        if ($id != $this->request->session()->read('Auth.User.id')) {
-            $this->Flash->error(__('You can not edit profile of this user!'));
-            $this->redirect(['controller'=> 'users', 'action'=> 'view',$id]);
-        } else {
-            $user = $this->Users->get($id, [
-              'contain' => []
-          ]);
-            if ($this->request->is(['patch', 'post', 'put'])) {
-                $user = $this->Users->patchEntity($user, $this->request->data);
-                if ($this->Users->save($user)) {
-                    $this->Flash->success(__('The user has been saved.'));
-                    return $this->redirect(['action' => 'index']);
-                } else {
-                    $this->Flash->error(__('The user could not be saved. Please, try again.'));
-                }
-            }
-            $this->set(compact('user'));
-            $this->set('_serialize', ['user']);
-        }
-    }
-
-    /**
-     * Delete method
-     * @param  [type] $id [description]
-     * @return [type]    user can not delete user
-     */
-    public function delete($id = null)
-    {
-        if ($id == $this->request->session()->read('Auth.User.id') && $this->request->session()->read('Auth.User.role') != 'admin') {
-            $this->Flash->error(__('Permission denied'));
-            $this->redirect(['controller'=> 'users', 'action'=> 'view',$id]);
-        }
-        if ($id != $this->request->session()->read('Auth.User.id')) {
-            $this->Flash->error(__('You can not edit profile of this user!'));
-            $this->redirect(['controller'=> 'users', 'action'=> 'view',$id]);
-        }
-    }
-
+    
     /**
      * Implement process reset password
      * @return [type] [description]
@@ -232,3 +251,4 @@ class UsersController extends AppController
         }
     }
 }
+

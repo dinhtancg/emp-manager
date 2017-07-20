@@ -10,7 +10,7 @@ use Cake\Validation\Validator;
 /**
  * Departments Model
  *
- * @property \Cake\ORM\Association\HasMany $Users
+ * @property \Cake\ORM\Association\BelongsToMany $Users
  */
 class DepartmentsTable extends Table
 {
@@ -28,12 +28,14 @@ class DepartmentsTable extends Table
         $this->table('departments');
         $this->displayField('name');
         $this->primaryKey('id');
+
+        $this->addBehavior('Timestamp');
+
         $this->belongsToMany('Users', [
             'foreignKey' => 'department_id',
             'targetForeignKey' => 'user_id',
             'joinTable' => 'departments_users'
         ]);
-        $this->addBehavior('Timestamp');
     }
 
     /**
@@ -53,5 +55,10 @@ class DepartmentsTable extends Table
             ->notEmpty('name');
 
         return $validator;
+    }
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->isUnique(['name']));
+        return $rules;
     }
 }

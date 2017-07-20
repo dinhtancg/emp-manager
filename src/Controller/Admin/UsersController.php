@@ -3,7 +3,6 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 use Cake\Mailer\Email;
-use Cake\ORM\TableRegistry;
 
 /**
  * Users Controller
@@ -50,38 +49,23 @@ class UsersController extends AppController
      */
     public function add()
     {
-        $departments_usersTable = TableRegistry::get('DepartmentsUsers');
-        $departments_users = $departments_usersTable->newEntity();
         $user = $this->Users->newEntity();
         if ($this->request->is('post')) {
             $user = $this->Users->patchEntity($user, $this->request->data);
-            $departments_users->department_id = $this->request->data('department_id');
-            $departments_users->position= $this->request->data('position');
-
-            //email content
             $mail =  $this->request->data('email');
             $subject = 'Account login system!';
             $message = 'Hi ' .$this->request->data('username'). '. Your information:
               Username :'.$this->request->data('username').',
-              password: '.$this->request->data('password').'.
+              password: '. $this->request->data('password').'.
               Welcome!!!';
-
-            //upload avatar
             if ($user->uploadAvatar($this->request->data['base64-avatar'], $this->request->data['avatar'])) {
                 if ($this->Users->save($user)) {
-                    //send email
                     $email = new Email();
                     $email->from(['tanhd070695@gmail.com'=>'Rikkeisoft'])
                       ->to($mail)
                       ->subject($subject)
                       ->send($message);
-                    $departments_users->user_id =  $user->id;
-                    if ($departments_usersTable->save($departments_users)) {
-                        $this->Flash->success(__('The user has been saved.'));
-                    } else {
-                        $this->Flash->error(__('The user could not be saved. Please, try again.'));
-                    }
-
+                    $this->Flash->success(__('The user has been saved.'));
                     return $this->redirect(['action' => 'index']);
                 } else {
                     $this->Flash->error(__('The user could not be saved. Please, try again.'));
@@ -90,7 +74,7 @@ class UsersController extends AppController
                 $this->Flash->error(__('The avatar could not be saved. please try again.'));
             }
         }
-        $departments = $this->Users->Departments->find('list');
+        $departments = $this->Users->Departments->find('list', ['limit' => 200]);
         $this->set(compact('user', 'departments'));
         $this->set('_serialize', ['user']);
     }
@@ -105,7 +89,7 @@ class UsersController extends AppController
     public function edit($id = null)
     {
         $user = $this->Users->get($id, [
-            'contain' => []
+            'contain' => ['Departments']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $user = $this->Users->patchEntity($user, $this->request->data);
@@ -116,7 +100,8 @@ class UsersController extends AppController
                 $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
         }
-        $this->set(compact('user'));
+        $departments = $this->Users->Departments->find('list', ['limit' => 200]);
+        $this->set(compact('user', 'departments'));
         $this->set('_serialize', ['user']);
     }
 
