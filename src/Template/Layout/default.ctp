@@ -13,7 +13,7 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
-$cakeDescription = 'CakePHP: the rapid development php framework';
+$cakeDescription = 'Employees Management System ';
 ?>
 <!DOCTYPE html>
 <html>
@@ -52,7 +52,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 } else {
                      ?>
                 <li><a target="_blank" href="/users/login">Login</a></li>
-                <li><a target="_blank" href="#">Register</a></li>
               <?php
                  } ?>
             </ul>

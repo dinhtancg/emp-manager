@@ -3,6 +3,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 use Cake\Mailer\Email;
+use Cake\ORM\TableRegistry;
 
 /**
  * Users Controller

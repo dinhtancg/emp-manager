@@ -3,6 +3,7 @@ namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 use Cake\Auth\DefaultPasswordHasher;
+use Cake\ORM\TableRegistry;
 
 /**
  * User Entity.
@@ -73,5 +74,21 @@ class User extends Entity
         if (file_put_contents(UPLOAD_DIR.$fileName, $avatar)) {
             return true;
         }
+    }
+    /**
+     * [isManager check manager method]
+     * @param  [type]  $user_id       [description]
+     * @param  [type]  $department_id [description]
+     * @return boolean                [description]
+     */
+    public function isManager($user_id, $department_id)
+    {
+        $query = TableRegistry::get('DepartmentsUsers')
+          ->find('all', ['fields'=>['manager']])
+          ->where(['user_id' => $user_id, 'department_id' => $department_id])->toArray();
+        if (count($query) ==0) {
+            return false;
+        }
+        return $query[0]->manager;
     }
 }

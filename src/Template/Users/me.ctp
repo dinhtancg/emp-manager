@@ -26,6 +26,10 @@
             <td><?= h($user->email) ?></td>
         </tr>
         <tr>
+            <th><?= __('Id') ?></th>
+            <td><?= $this->Number->format($user->id) ?></td>
+        </tr>
+        <tr>
             <th><?= __('Dob') ?></th>
             <td><?= h($user->dob) ?></td>
         </tr>
@@ -36,8 +40,6 @@
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <th><?= __('Name') ?></th>
-                <th><?= __('Created') ?></th>
-                <th><?= __('Modified') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($user->departments as $departments): ?>
@@ -45,11 +47,6 @@
                 <td><?= h($departments->name) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['controller' => 'Departments', 'action' => 'view', $departments->id]) ?>
-
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Departments', 'action' => 'edit', $departments->id]) ?>
-
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Departments', 'action' => 'delete', $departments->id], ['confirm' => __('Are you sure you want to delete # {0}?', $departments->id)]) ?>
-
                 </td>
             </tr>
             <?php endforeach; ?>

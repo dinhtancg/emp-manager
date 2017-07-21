@@ -30,7 +30,7 @@
         </tr>
     </table>
     <div class="related">
-        <h4><?= __('Related Employyes') ?></h4>
+        <h4><?= __('Related Employees') ?></h4>
         <?php if (!empty($department->users)): ?>
         <table cellpadding="0" cellspacing="0">
             <tr>
@@ -38,7 +38,7 @@
                 <th><?= __('Email') ?></th>
                 <th><?= __('Dob') ?></th>
                 <th><?= __('Avatar') ?></th>
-                <th><?= __('Role') ?></th>
+                <th><?= __('Position') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($department->users as $users): ?>
@@ -47,14 +47,31 @@
                 <td><?= h($users->email) ?></td>
                 <td><?= h($users->dob) ?></td>
                 <td><img src="<?= '/img/uploads/'.$users->avatar?>" alt="Avatar" width="50px" height="50px"></td>
-                <td><?= h($users->role) ?></td>
+                <?php
+                if ($users->isManager($users->id, $department->id)) {
+                    ?>
+                <td>Manager</td>
+              <?php
+                } else {
+                    ?>
+                <td>Employees</td>
+              <?php
+                } ?>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['controller' => 'Users', 'action' => 'view', $users->id]) ?>
 
                     <?= $this->Html->link(__('Edit'), ['controller' => 'Users', 'action' => 'edit', $users->id]) ?>
 
                     <?= $this->Form->postLink(__('Delete'), ['controller' => 'Users', 'action' => 'delete', $users->id], ['confirm' => __('Are you sure you want to delete # {0}?', $users->id)]) ?>
-
+                    <?php if ($users->isManager($users->id, $department->id)==1) {
+                    ?>
+                    <?= $this->Form->postLink(__('Down'), ['prefix'=>'admin','controller' => 'Departments', 'action' => 'manager', $department->id, $users->id], ['confirm' => __('Are you sure you want to down user # {0}?', $users->username)]) ?>
+                    <?php
+                } else {
+                    ?>
+                    <?= $this->Form->postLink(__('Up'), ['prefix'=>'admin','controller' => 'Departments', 'action' => 'manager', $department->id, $users->id], ['confirm' => __('Are you sure you want to up user # {0}?', $users->username)]) ?>
+                <?php
+                } ?>
                 </td>
             </tr>
             <?php endforeach; ?>
