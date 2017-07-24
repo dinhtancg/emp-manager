@@ -126,6 +126,9 @@ class UsersController extends AppController
             $user = $this->Auth->identify();
             if ($user) {
                 $this->Auth->setUser($user);
+                $this->Auth->user->login_fail = null;
+                $this->Auth->user->time_ban = null;
+                $this->Users->save($this->Auth->user());
                 if ($this->Auth->user('first_login') == 0) {
                     // 0 : The user has never logged in before
                     return $this->redirect(['controller' => 'users', 'action'=>'changePassword']);
@@ -133,6 +136,20 @@ class UsersController extends AppController
                     return $this->redirect(['prefix'=>'admin','controller' => 'users', 'action' => 'index']);
                 } else {
                     return $this->redirect($this->Auth->redirectUrl());
+                }
+            } else {
+                $userF = $this->Users->findByUsername($this->request->data['username'])->first();
+                if (time() - $userF->time_ban < 0) {
+                    return $this->Flash->error(__('Your account is locked '));
+                }
+                if ($userF->login_fail >= 5) {
+                    return $this->Flash->error(__('Your account has block 10 minutes!'));
+                    $time_ban  = time()+ 600;
+                    $time=Time::now()->mod;
+                    $this->Users->updateAll(['time_ban' => $time_ban], ['id' => $userF->id]);
+                } else {
+                    $userF->login_fail = $userF->login_fail + 1;
+                    $this->Users->save($userF);
                 }
             }
             $this->Flash->error(__('Invalid username or password, please try again!'));

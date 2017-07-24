@@ -21,7 +21,7 @@
     <div class="related">
         <h4><?= __('Related Employees') ?></h4>
         <?php if (!empty($department->users)): ?>
-        <table cellpadding="0" cellspacing="0">
+        <table cellpadding="0" cellspacing="0" style="word-break:break-word">
             <tr>
                 <th><?= __('Username') ?></th>
                 <th><?= __('Email') ?></th>
