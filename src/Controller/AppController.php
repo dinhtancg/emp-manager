@@ -16,6 +16,8 @@ namespace App\Controller;
 
 use Cake\Controller\Controller;
 use Cake\Event\Event;
+use Cake\Routing\Router;
+use Cake\Mailer\Email;
 
 /**
  * Application Controller
@@ -65,7 +67,6 @@ class AppController extends Controller
      */
     public function beforeRender(Event $event)
     {
-        // die('aa');
         if (!array_key_exists('_serialize', $this->viewVars) &&
             in_array($this->response->type(), ['application/json', 'application/xml'])
         ) {
@@ -92,5 +93,57 @@ class AppController extends Controller
 
         // Default deny
         return false;
+    }
+    /**
+     * Send email to user for reset password
+     * @param string $url  Link reset password
+     * @param  $user
+     */
+    public function sendResetEmail($url, $user)
+    {
+        $email = new Email();
+        $email-> template('resetpw');
+        $email->emailFormat('both');
+        $email->from('tanhd070695@gmail.com');
+        $email->to($user->email, $user->username);
+        $email->subject('Reset your password');
+        $email->viewVars(['url'=>$url, 'username'=> $user->username]);
+        if ($email->send()) {
+            $this->Flash->success(__('Check your email for your password reset link!'));
+        } else {
+            $this->Flash->error(__('Error sending email :'). $email->smtpError);
+        }
+    }
+    /**
+     * [reset password medthod]
+     * @param [type] $pass_key [description]
+     */
+    public function reset($pass_key = null)
+    {
+        if ($pass_key) {
+            $query = $this->Users->find('all', ['conditions' => ['pass_key' => $pass_key, 'timeout >' =>time()]]);
+            $user = $query->first();
+            if ($user) {
+                if (!empty($this->request->data)) {
+                    //Clear pass_key and timeout
+                    $this->request->data['pass_key'] = null;
+                    $this->request->data['timeout'] = null;
+                    $user= $this->Users->patchEntity($user, $this->request->data);
+                    if ($this->Users->save($user)) {
+                        $this->Flash->set(__("Your password has been update."));
+                        return $this->redirect(['action'=>'login']);
+                    } else {
+                        $this->Flash->error(__('The password not be updated. Please try again.'));
+                    }
+                }
+            } else {
+                $this->Flash->error(__('Invalid or expired pass_key. Please check your email to try again!'));
+                $this->redirect(['action', 'password']);
+            }
+            unset($user ->password);
+            $this->set(compact('user'));
+        } else {
+            $this->redirect('/');
+        }
     }
 }
