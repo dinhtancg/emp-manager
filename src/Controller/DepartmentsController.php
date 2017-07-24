@@ -52,6 +52,7 @@ class DepartmentsController extends AppController
      public function add()
      {
          if ($this->request->session()->read('Auth.User.role') != 1) {
+             // 1 is Admin
              $this->Flash->error(__('Permission denied'));
              $this->redirect(['controller'=> 'departments', 'action'=> 'index']);
          }
@@ -68,6 +69,7 @@ class DepartmentsController extends AppController
     public function edit($id = null)
     {
         if ($this->request->session()->read('Auth.User.role') != 1) {
+            // 1 is Admin
             $this->Flash->error(__('Permission denied'));
             $this->redirect(['controller'=> 'departments', 'action'=> 'view',$id]);
         }
@@ -83,9 +85,24 @@ class DepartmentsController extends AppController
     public function delete($id = null)
     {
         if ($this->request->session()->read('Auth.User.role') != 1) {
+            // 1 is Admin
             $this->Flash->error(__('Permission denied'));
             $this->redirect(['controller'=> 'departments', 'action'=> 'view',$id]);
         }
-        // TODO
+    }
+    public function export($id = null)
+    {
+        $department = $this->Departments->get($id, [
+            'contain' => ['Users']
+        ]);
+        $data = $department->users;
+        $fileName = $department->name.'.csv';
+        $this->response->download($fileName);
+        $_serialize = 'data';
+        $_header = ['ID', 'UserName', 'Email','Gender', 'DoB'];
+        $_extract = ['id', 'username', 'email','gender', 'dob'];
+        $this->set(compact('data', '_serialize', '_header', '_extract'));
+        $this->viewBuilder()->className('CsvView.Csv');
+        return;
     }
 }

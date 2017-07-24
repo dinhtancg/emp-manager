@@ -2,6 +2,7 @@
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('List Departments'), ['action' => 'index']) ?> </li>
+        <li><?= $this->Html->link(__('Export'), ['controller' => 'Departments', 'action' => 'export', $department->id]) ?></li>
     </ul>
 </nav>
 <div class="departments view large-9 medium-8 columns content">
@@ -49,4 +50,5 @@
         </table>
     <?php endif; ?>
     </div>
+
 </div>

@@ -83,3 +83,4 @@ Router::prefix('admin', function ($routes) {
  * how to customize the loading of plugin routes.
  */
 Plugin::routes();
+Router::extensions(['csv']);

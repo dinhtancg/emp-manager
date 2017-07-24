@@ -129,10 +129,10 @@ class DepartmentsController extends AppController
             $record[0]->manager = 0;
         }
         if (TableRegistry::get('DepartmentsUsers')->save($record[0])) {
-            $this->Flash->success(_('Up to manager success'));
+            $this->Flash->success(_('Change manager success'));
             return $this->redirect(['controller' => 'Departments', 'action' => 'view', $department_id]);
         } else {
-            $this->Flash->error(_('Up to manager false'));
+            $this->Flash->error(_('Change manager false'));
             return $this->redirect(['controller' => 'Departments', 'action' => 'view', $department_id]);
         }
     }
