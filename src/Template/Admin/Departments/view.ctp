@@ -63,7 +63,7 @@
                     <?= $this->Html->link(__('Edit'), ['controller' => 'Users', 'action' => 'edit', $users->id]) ?>
 
                     <?= $this->Form->postLink(__('Delete'), ['controller' => 'Users', 'action' => 'delete', $users->id], ['confirm' => __('Are you sure you want to delete # {0}?', $users->id)]) ?>
-                    <?php if ($users->isManager($users->id, $department->id)==1) {
+                    <?php if ($users->isManager($users->id, $department->id)) {
                     ?>
                     <?= $this->Form->postLink(__('Down'), ['prefix'=>'admin','controller' => 'Departments', 'action' => 'manager', $department->id, $users->id], ['confirm' => __('Are you sure you want to down user # {0}?', $users->username)]) ?>
                     <?php

@@ -53,6 +53,7 @@ class UsersController extends AppController
     public function add()
     {
         if ($this->request->session()->read('Auth.User.role') != 1) {
+            // 1 is Admin
             $this->Flash->error(__('Permission denied'));
             $this->redirect(['controller'=> 'users', 'action'=> 'index']);
         }
@@ -87,7 +88,7 @@ class UsersController extends AppController
                     $this->Flash->error(__('The avatar could not be saved. please try again.'));
                 }
             }
-            $departments = $this->Users->Departments->find('list', ['limit' => 200]);
+            $departments = $this->Users->Departments->find('list', ['limit' => QUERY_LIMIT]);
             $this->set(compact('user', 'departments'));
             $this->set('_serialize', ['user']);
         }
@@ -126,6 +127,7 @@ class UsersController extends AppController
             if ($user) {
                 $this->Auth->setUser($user);
                 if ($this->Auth->user('first_login') == 0) {
+                    // 0 : The user has never logged in before
                     return $this->redirect(['controller' => 'users', 'action'=>'changePassword']);
                 } elseif ($this->Auth->user('role')) {
                     return $this->redirect(['prefix'=>'admin','controller' => 'users', 'action' => 'index']);

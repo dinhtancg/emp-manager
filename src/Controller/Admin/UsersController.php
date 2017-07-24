@@ -75,7 +75,7 @@ class UsersController extends AppController
                 $this->Flash->error(__('The avatar could not be saved. please try again.'));
             }
         }
-        $departments = $this->Users->Departments->find('list', ['limit' => 200]);
+        $departments = $this->Users->Departments->find('list', ['limit' => QUERY_LIMIT]);
         $this->set(compact('user', 'departments'));
         $this->set('_serialize', ['user']);
     }
@@ -101,7 +101,7 @@ class UsersController extends AppController
                 $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
         }
-        $departments = $this->Users->Departments->find('list', ['limit' => 200]);
+        $departments = $this->Users->Departments->find('list', ['limit' => QUERY_LIMIT]);
         $this->set(compact('user', 'departments'));
         $this->set('_serialize', ['user']);
     }
