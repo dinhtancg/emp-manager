@@ -3,6 +3,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AppController;
 use Cake\Mailer\Email;
+use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
 
 /**
@@ -123,5 +124,33 @@ class UsersController extends AppController
             $this->Flash->error(__('The user could not be deleted. Please, try again.'));
         }
         return $this->redirect(['action' => 'index']);
+    }
+    /**
+     * Reset password of user
+     * @return [type] [sent email to user's email]
+     */
+    public function password()
+    {
+        if ($this->request->is('post')) {
+            $arrayIds = $this->request->data['users']['_ids'];
+            foreach ($arrayIds as $id) {
+                $user = $this->Users->findById($id)->first();
+                if (!$user) {
+                    $this->Flash->error(__('User does not exist. Please try again!'));
+                } else {
+                    $pass_key = uniqid();
+                    $url = Router::Url(['controller' =>'users', 'action' => 'reset'], true).'/'. $pass_key;
+                    $url= str_replace("/admin", "", $url);
+                    $timeout = time()+ DAY;
+                    if ($this->Users->updateAll(['pass_key' => $pass_key, 'timeout' => $timeout], ['id' => $user->id])) {
+                        $this->sendResetEmail($url, $user);
+                    } else {
+                        $this->Flash->error('Error saving reset pass_key/ timeout');
+                    }
+                }
+            }
+        }
+        $users = $this->Users->find('list', ['limit' => QUERY_LIMIT]);
+        $this->set(compact('users'));
     }
 }
