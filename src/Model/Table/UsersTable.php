@@ -6,11 +6,11 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use Cake\Auth\DefaultPasswordHasher;
 
 /**
  * Users Model
  *
+ * @property \Cake\ORM\Association\BelongsToMany $Departments
  */
 class UsersTable extends Table
 {
@@ -26,13 +26,19 @@ class UsersTable extends Table
         parent::initialize($config);
 
         $this->table('users');
-        $this->displayField('id');
+        $this->displayField('username');
         $this->primaryKey('id');
+
         $this->addBehavior('Timestamp');
-        $this->belongsTo('Departments', ['foreignKey' => 'department_id']);
+
+        $this->belongsToMany('Departments', [
+            'foreignKey' => 'user_id',
+            'targetForeignKey' => 'department_id',
+            'joinTable' => 'departments_users'
+        ]);
     }
 
-    /**
+        /**
      * Default validation rules.
      *
      * @param \Cake\Validation\Validator $validator Validator instance.
@@ -72,23 +78,29 @@ class UsersTable extends Table
                     'rule' => [$this, 'checkCharacters'],
                     'message' => 'The password must contain 1 number, 1 uppercase, 1 lowercase, and 1 special character'
                 ]);
-
+        $validator
+              ->requirePresence('dob', 'create')
+              ->notEmpty('dob', 'You must enter your dob', 'create');
+        $validator
+                    ->requirePresence('avatar', 'create')
+                    ->notEmpty('avatar', 'You must choose your avatar!', 'create');
         $validator
             ->requirePresence('role', 'create')
             ->notEmpty('role')
             ->add('role', 'inList', [
-              'rule'=> ['inList', ['admin','user']],
+              'rule'=> ['inList', ['1','0']],
               'message' => 'Please enter a valid role'
             ]);
         $validator
-            ->allowEmpty('job')
-            ->add('job', 'inList', [
-              'rule'=> ['inList', ['manager','employee']],
-              'message' => 'Please enter a valid role'
+            ->requirePresence('gender', 'create')
+            ->notEmpty('gender')
+            ->add('gender', 'inList', [
+              'rule'=> ['inList', ['men','women','other']],
+              'message' => 'Please enter a valid position.'
             ]);
         $validator
-        ->requirePresence('first_login', 'create')
-        ->notEmpty('first_login');
+            ->requirePresence('first_login', 'create')
+            ->notEmpty('first_login');
 
         $validator
             ->requirePresence('confirm_password', 'create')

@@ -4,15 +4,18 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * Department Entity.
+ * DepartmentsUser Entity.
  *
  * @property int $id
- * @property string $name
+ * @property int $department_id
+ * @property \App\Model\Entity\Department $department
+ * @property int $user_id
+ * @property \App\Model\Entity\User $user
+ * @property string $position
  * @property \Cake\I18n\Time $created
  * @property \Cake\I18n\Time $modified
- * @property \App\Model\Entity\User[] $users
  */
-class Department extends Entity
+class DepartmentsUser extends Entity
 {
 
     /**

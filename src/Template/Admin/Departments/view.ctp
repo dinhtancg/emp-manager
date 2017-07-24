@@ -21,35 +21,57 @@
             <td><?= $this->Number->format($department->id) ?></td>
         </tr>
         <tr>
-            <th><?= __('User Id') ?></th>
-            <td><?= $this->Number->format($department->user_id) ?></td>
+            <th><?= __('Created') ?></th>
+            <td><?= h($department->created) ?></td>
+        </tr>
+        <tr>
+            <th><?= __('Modified') ?></th>
+            <td><?= h($department->modified) ?></td>
         </tr>
     </table>
     <div class="related">
-        <h4><?= __('List Users of Department') ?></h4>
+        <h4><?= __('Related Employees') ?></h4>
         <?php if (!empty($department->users)): ?>
         <table cellpadding="0" cellspacing="0">
             <tr>
-                <th><?= __('Id') ?></th>
                 <th><?= __('Username') ?></th>
                 <th><?= __('Email') ?></th>
-                <th><?= __('Job') ?></th>
-
+                <th><?= __('Dob') ?></th>
+                <th><?= __('Avatar') ?></th>
+                <th><?= __('Position') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($department->users as $users): ?>
             <tr>
-                <td><?= h($users->id) ?></td>
                 <td><?= h($users->username) ?></td>
                 <td><?= h($users->email) ?></td>
-                <td><?= h($users->job) ?></td>
+                <td><?= h($users->dob) ?></td>
+                <td><img src="<?= '/img/uploads/'.$users->avatar?>" alt="Avatar" width="50px" height="50px"></td>
+                <?php
+                if ($users->isManager($users->id, $department->id)) {
+                    ?>
+                <td>Manager</td>
+              <?php
+                } else {
+                    ?>
+                <td>Employees</td>
+              <?php
+                } ?>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['controller' => 'Users', 'action' => 'view', $users->id]) ?>
 
                     <?= $this->Html->link(__('Edit'), ['controller' => 'Users', 'action' => 'edit', $users->id]) ?>
 
                     <?= $this->Form->postLink(__('Delete'), ['controller' => 'Users', 'action' => 'delete', $users->id], ['confirm' => __('Are you sure you want to delete # {0}?', $users->id)]) ?>
-
+                    <?php if ($users->isManager($users->id, $department->id)) {
+                    ?>
+                    <?= $this->Form->postLink(__('Down'), ['prefix'=>'admin','controller' => 'Departments', 'action' => 'manager', $department->id, $users->id], ['confirm' => __('Are you sure you want to down user # {0}?', $users->username)]) ?>
+                    <?php
+                } else {
+                    ?>
+                    <?= $this->Form->postLink(__('Up'), ['prefix'=>'admin','controller' => 'Departments', 'action' => 'manager', $department->id, $users->id], ['confirm' => __('Are you sure you want to up user # {0}?', $users->username)]) ?>
+                <?php
+                } ?>
                 </td>
             </tr>
             <?php endforeach; ?>

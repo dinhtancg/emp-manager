@@ -2,6 +2,7 @@
 namespace App\Controller\Admin;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 /**
  * Departments Controller
@@ -18,13 +19,10 @@ class DepartmentsController extends AppController
      */
     public function index()
     {
-        $this->paginate = [
-          'contain' => ['Users']
-      ];
         $departments = $this->paginate($this->Departments);
 
         $this->set(compact('departments'));
-        $this->set('_serialize', ['departments']););
+        $this->set('_serialize', ['departments']);
     }
 
     /**
@@ -61,7 +59,8 @@ class DepartmentsController extends AppController
                 $this->Flash->error(__('The department could not be saved. Please, try again.'));
             }
         }
-        $this->set(compact('department'));
+        $users = $this->Departments->Users->find('list', ['limit' => QUERY_LIMIT]);
+        $this->set(compact('department', 'users'));
         $this->set('_serialize', ['department']);
     }
 
@@ -75,18 +74,19 @@ class DepartmentsController extends AppController
     public function edit($id = null)
     {
         $department = $this->Departments->get($id, [
-            'contain' => []
+            'contain' => ['Users']
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
             $department = $this->Departments->patchEntity($department, $this->request->data);
             if ($this->Departments->save($department)) {
                 $this->Flash->success(__('The department has been saved.'));
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'view', $id]);
             } else {
                 $this->Flash->error(__('The department could not be saved. Please, try again.'));
             }
         }
-        $this->set(compact('department'));
+        $users = $this->Departments->Users->find('list', ['limit' => QUERY_LIMIT]);
+        $this->set(compact('department', 'users'));
         $this->set('_serialize', ['department']);
     }
 
@@ -107,5 +107,33 @@ class DepartmentsController extends AppController
             $this->Flash->error(__('The department could not be deleted. Please, try again.'));
         }
         return $this->redirect(['action' => 'index']);
+    }
+    /**
+     * [up to Manager]
+     * @param  [type] $department_id [description]
+     * @param  [type] $user_id       [description]
+     * @return [type]                [description]
+     */
+    public function manager($department_id, $user_id)
+    {
+        $this->autoRender = false;
+        $record = TableRegistry::get('DepartmentsUsers')
+          ->find('all')
+          ->where(['user_id' => $user_id, 'department_id' => $department_id])->toArray();
+
+          // 0  is not manager
+          // 1 is manager
+        if ($record[0]->manager == 0) {
+            $record[0]->manager = 1;
+        } else {
+            $record[0]->manager = 0;
+        }
+        if (TableRegistry::get('DepartmentsUsers')->save($record[0])) {
+            $this->Flash->success(_('Up to manager success'));
+            return $this->redirect(['controller' => 'Departments', 'action' => 'view', $department_id]);
+        } else {
+            $this->Flash->error(_('Up to manager false'));
+            return $this->redirect(['controller' => 'Departments', 'action' => 'view', $department_id]);
+        }
     }
 }

@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\ORM\TableRegistry;
 
 /**
  * Departments Controller
@@ -10,6 +11,7 @@ use App\Controller\AppController;
  */
 class DepartmentsController extends AppController
 {
+    public $uses = ['Users'];
 
     /**
      * Index method
@@ -31,21 +33,29 @@ class DepartmentsController extends AppController
      * @return \Cake\Network\Response|null
      * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
      */
-    public function view($id = null)
-    {
-        $department = $this->Departments->get($id, [
-            'contain' => ['Users']
-        ]);
-
-        $this->set('department', $department);
-        $this->set('_serialize', ['department']);
-    }
+     public function view($id = null)
+     {
+         $department = $this->Departments->get($id, [
+             'contain' => ['Users']
+         ]);
+         $loggedUser=TableRegistry::get('Users')->get($this->Auth->user('id'));
+         $this->set('department', $department);
+         $this->set('loggedUser', $loggedUser);
+         $this->set('_serialize', ['department']);
+     }
 
     /**
      * Add method
      *
      * @return \Cake\Network\Response|void Redirects on successful add, renders view otherwise.
      */
+     public function add()
+     {
+         if ($this->request->session()->read('Auth.User.role') != 1) {
+             $this->Flash->error(__('Permission denied'));
+             $this->redirect(['controller'=> 'departments', 'action'=> 'index']);
+         }
+     }
 
 
     /**
@@ -57,7 +67,7 @@ class DepartmentsController extends AppController
      */
     public function edit($id = null)
     {
-        if ($this->request->session()->read('Auth.User.role') != 'admin') {
+        if ($this->request->session()->read('Auth.User.role') != 1) {
             $this->Flash->error(__('Permission denied'));
             $this->redirect(['controller'=> 'departments', 'action'=> 'view',$id]);
         }
@@ -72,7 +82,7 @@ class DepartmentsController extends AppController
      */
     public function delete($id = null)
     {
-        if ($this->request->session()->read('Auth.User.role') != 'admin') {
+        if ($this->request->session()->read('Auth.User.role') != 1) {
             $this->Flash->error(__('Permission denied'));
             $this->redirect(['controller'=> 'departments', 'action'=> 'view',$id]);
         }

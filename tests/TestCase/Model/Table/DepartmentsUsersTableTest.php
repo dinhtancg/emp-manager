@@ -1,22 +1,22 @@
 <?php
 namespace App\Test\TestCase\Model\Table;
 
-use App\Model\Table\DepartmentsTable;
+use App\Model\Table\DepartmentsUsersTable;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
 /**
- * App\Model\Table\DepartmentsTable Test Case
+ * App\Model\Table\DepartmentsUsersTable Test Case
  */
-class DepartmentsTableTest extends TestCase
+class DepartmentsUsersTableTest extends TestCase
 {
 
     /**
      * Test subject
      *
-     * @var \App\Model\Table\DepartmentsTable
+     * @var \App\Model\Table\DepartmentsUsersTable
      */
-    public $Departments;
+    public $DepartmentsUsers;
 
     /**
      * Fixtures
@@ -24,9 +24,9 @@ class DepartmentsTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
+        'app.departments_users',
         'app.departments',
-        'app.users',
-        'app.departments_users'
+        'app.users'
     ];
 
     /**
@@ -37,8 +37,8 @@ class DepartmentsTableTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $config = TableRegistry::exists('Departments') ? [] : ['className' => 'App\Model\Table\DepartmentsTable'];
-        $this->Departments = TableRegistry::get('Departments', $config);
+        $config = TableRegistry::exists('DepartmentsUsers') ? [] : ['className' => 'App\Model\Table\DepartmentsUsersTable'];
+        $this->DepartmentsUsers = TableRegistry::get('DepartmentsUsers', $config);
     }
 
     /**
@@ -48,7 +48,7 @@ class DepartmentsTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Departments);
+        unset($this->DepartmentsUsers);
 
         parent::tearDown();
     }
@@ -69,6 +69,16 @@ class DepartmentsTableTest extends TestCase
      * @return void
      */
     public function testValidationDefault()
+    {
+        $this->markTestIncomplete('Not implemented yet.');
+    }
+
+    /**
+     * Test buildRules method
+     *
+     * @return void
+     */
+    public function testBuildRules()
     {
         $this->markTestIncomplete('Not implemented yet.');
     }

@@ -3,6 +3,7 @@ namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
 use Cake\Auth\DefaultPasswordHasher;
+use Cake\ORM\TableRegistry;
 
 /**
  * User Entity.
@@ -11,9 +12,18 @@ use Cake\Auth\DefaultPasswordHasher;
  * @property string $username
  * @property string $email
  * @property string $password
- * @property string $role
- * @property \Cake\I18n\Time $created_at
- * @property \Cake\I18n\Time $updated_at
+ * @property \Cake\I18n\Time $dob
+ * @property string $avatar
+ * @property bool $role
+ * @property bool $first_login
+ * @property bool $login_failse
+ * @property \Cake\I18n\Time $time_ban
+ * @property string $pass_key
+ * @property \Cake\I18n\Time $timeout
+ * @property \Cake\I18n\Time $created
+ * @property \Cake\I18n\Time $modified
+ * @property bool $flag_delete
+ * @property \App\Model\Entity\Department[] $departments
  */
 class User extends Entity
 {
@@ -41,10 +51,44 @@ class User extends Entity
         'password'
     ];
 
+    /**
+     * Hash password
+     * @param type $password
+     * @return type hash password
+     */
     protected function _setPassword($password)
     {
         if (strlen($password) > 0) {
             return (new DefaultPasswordHasher)->hash($password);
         }
+    }
+    /**
+     * Upload image avatar check
+     * @param type $avatar
+     * @param type $fileName
+     * @return boolean
+     */
+    public function uploadAvatar($avatar, $fileName)
+    {
+        $avatar = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $avatar));
+        if (file_put_contents(UPLOAD_DIR.$fileName, $avatar)) {
+            return true;
+        }
+    }
+    /**
+     * [isManager check manager method]
+     * @param  [type]  $user_id       [description]
+     * @param  [type]  $department_id [description]
+     * @return boolean                [description]
+     */
+    public function isManager($user_id, $department_id)
+    {
+        $query = TableRegistry::get('DepartmentsUsers')
+          ->find('all', ['fields'=>['manager']])
+          ->where(['user_id' => $user_id, 'department_id' => $department_id])->toArray();
+        if (count($query) ==0) {
+            return false;
+        }
+        return $query[0]->manager;
     }
 }
