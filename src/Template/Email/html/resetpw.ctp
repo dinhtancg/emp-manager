@@ -1,4 +1,4 @@
-<p>Your username is <?php echo $username; ?></p>
+<p>Hi <?php echo $username; ?> ,</p>
 
 <p>Click on the link below to Reset Your Password.</p>
 
