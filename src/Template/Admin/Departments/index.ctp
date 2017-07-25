@@ -8,6 +8,19 @@
 </nav>
 <div class="departments index large-9 medium-8 columns content">
     <h3><?= __('Departments') ?></h3>
+    <div id="recperpage">
+        <?=$this->Form->create(null, [
+        'url' => ['controller' => 'Departments', 'action' => 'index'],
+        'id'  => 'recordsPerPage',
+        ])?>
+    	Records per page: <?= $this->Form->select('recperpageval',
+                [5=>5, 25=>25, 50=>50],
+                ['default' => 5, 'onchange'=>'onSelectSubmit("recordsPerPage")']
+            )
+        ?>
+        <?=$this->Form->end()?>
+    </div>
+    <hr>
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>

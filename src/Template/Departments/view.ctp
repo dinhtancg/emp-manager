@@ -23,11 +23,11 @@
         <?php if (!empty($department->users)): ?>
         <table cellpadding="0" cellspacing="0" style="word-break:break-word">
             <tr>
-                <th><?= __('Username') ?></th>
-                <th><?= __('Email') ?></th>
-                <th><?= __('Dob') ?></th>
-                <th><?= __('Avatar') ?></th>
-                <th><?= __('Position') ?></th>
+                <th><?= $this->Paginator->sort('username') ?></th>
+                <th><?= $this->Paginator->sort('email') ?></th>
+                <th><?= $this->Paginator->sort('DayOfBirth') ?></th>
+                <th><?= $this->Paginator->sort('avatar') ?></th>
+                <th><?= $this->Paginator->sort('position') ?></th>
             </tr>
             <?php foreach ($department->users as $users): ?>
             <tr>
@@ -48,6 +48,14 @@
             </tr>
             <?php endforeach; ?>
         </table>
+        <div class="paginator">
+            <ul class="pagination">
+                <?= $this->Paginator->prev('< ' . __('previous')) ?>
+                <?= $this->Paginator->numbers() ?>
+                <?= $this->Paginator->next(__('next') . ' >') ?>
+            </ul>
+            <p><?= $this->Paginator->counter() ?></p>
+        </div>
     <?php endif; ?>
     </div>
 

@@ -9,7 +9,7 @@
         <li><?= $this->Html->link(__('New Department'), ['controller' => 'Departments', 'action' => 'add']) ?> </li>
     </ul>
 </nav>
-<div class="users view large-9 medium-8 columns content">
+<div class="users view large-5 medium-7 columns content" id="form">
     <h3><?= 'Profile of '.h($user->username) ?></h3>
     <table class="vertical-table">
         <tr>
@@ -26,7 +26,7 @@
             <td><?= h($user->email) ?></td>
         </tr>
         <tr>
-            <th><?= __('Dob') ?></th>
+            <th><?= __('Day Of Birth') ?></th>
             <td><?= h($user->dob) ?></td>
         </tr>
     </table>
@@ -36,8 +36,6 @@
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <th><?= __('Name') ?></th>
-                <th><?= __('Created') ?></th>
-                <th><?= __('Modified') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($user->departments as $departments): ?>

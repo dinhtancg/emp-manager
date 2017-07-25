@@ -12,7 +12,7 @@
         <li><?= $this->Html->link(__('New User'), ['controller' => 'Users', 'action' => 'add']) ?></li>
     </ul>
 </nav>
-<div class="departments form large-9 medium-8 columns content">
+<div class="departments form large-5 medium-7 columns content" id="form">
     <?= $this->Form->create($department) ?>
     <fieldset>
         <legend><?= __('Edit Department') ?></legend>

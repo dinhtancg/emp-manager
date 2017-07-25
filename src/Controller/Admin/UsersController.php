@@ -21,8 +21,14 @@ class UsersController extends AppController
      */
     public function index()
     {
-        $users = $this->paginate($this->Users);
-
+        $limit = 5;
+        if ($this->request->is('post')) {
+            if (in_array($this->request->data('recperpageval'),
+      [5, 25, 50])) {
+                $limit = $this->request->data('recperpageval');
+            }
+        }
+        $users = $this->Paginator->paginate($this->Users, ['limit' =>$limit]);
         $this->set(compact('users'));
         $this->set('_serialize', ['users']);
     }

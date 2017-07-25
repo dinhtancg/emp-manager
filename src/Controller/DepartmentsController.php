@@ -12,7 +12,6 @@ use Cake\ORM\TableRegistry;
 class DepartmentsController extends AppController
 {
     public $uses = ['Users'];
-
     /**
      * Index method
      *
@@ -20,8 +19,14 @@ class DepartmentsController extends AppController
      */
     public function index()
     {
-        $departments = $this->paginate($this->Departments);
-
+        $limit = 5;
+        if ($this->request->is('post')) {
+            if (in_array($this->request->data('recperpageval'),
+        [5, 25, 50])) {
+                $limit = $this->request->data('recperpageval');
+            }
+        }
+        $departments = $this->Paginator->paginate($this->Departments, ['limit' =>$limit]);
         $this->set(compact('departments'));
         $this->set('_serialize', ['departments']);
     }

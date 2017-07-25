@@ -3,7 +3,7 @@
         <li class="heading"><?= __('Welcome') ?></li>
     </ul>
 </nav>
-<div class="users form large-9 medium-9 columns content">
+<div class="users form large-5 medium-7 columns content" id="form">
 <?= $this->Form->create($user) ?>
 <fieldset>
     <legend><?= __('Change password') ?></legend>
