@@ -40,7 +40,7 @@ class DepartmentsController extends AppController
      */
     public function view($id = null)
     {
-        $department = $this->Paginator->paginate($id, [
+        $department = $this->Departments->get($id, [
             'contain' => ['Users']
         ]);
 
