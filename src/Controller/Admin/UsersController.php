@@ -5,6 +5,7 @@ use App\Controller\AppController;
 use Cake\Mailer\Email;
 use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
+use Cake\I18n\Time;
 
 /**
  * Users Controller

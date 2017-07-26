@@ -15,7 +15,10 @@
             echo $this->Form->input('email');
             echo $this->Form->input('password');
             echo $this->Form->input('confirm_password', ['type'=>'password']);
-            echo $this->Form->input('dob');
+            echo $this->Form->input('dob', [
+              'minYear' => date('Y') - 100,
+              'maxYear' => date('Y')
+              ]);
             echo $this->Form->input('gender', [
               'options' => ['men' =>'Men', 'women' => 'Women','other'=>'Other']
             ]);
