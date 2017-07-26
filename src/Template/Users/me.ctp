@@ -32,21 +32,38 @@
     </table>
     <div class="related">
         <h4><?= __('Related Departments') ?></h4>
-        <?php if (!empty($user->departments)): ?>
+        <div id="recperpage">
+            <?=$this->Form->create(null, [
+            'url' => ['controller' => 'Departments', 'action' => 'view', $user->id],
+            'id'  => 'recordsPerPage',
+            ])?>
+        	  <?= $this->Form->select('recperpageval',
+                    [5=>5, 25=>25, 50=>50],
+                    ['default' => 5, 'onchange'=>'onSelectSubmit("recordsPerPage")']
+                )
+            ?>
+            <?=$this->Form->end()?>
+        </div>
+        <hr>
+        <?php if (!empty($departments)): ?>
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <th><?= __('Name') ?></th>
-                <th class="actions"><?= __('Actions') ?></th>
             </tr>
-            <?php foreach ($user->departments as $departments): ?>
+            <?php foreach ($departments as $department): ?>
             <tr>
-                <td><?= h($departments->name) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Departments', 'action' => 'view', $departments->id]) ?>
-                </td>
+                <td><?= $this->Html->link($department->name, ['controller' => 'Departments', 'action' => 'view', $department->id]) ?></td>
             </tr>
             <?php endforeach; ?>
         </table>
+        <div class="paginator">
+            <ul class="pagination">
+                <?= $this->Paginator->prev('< ' . __('previous')) ?>
+                <?= $this->Paginator->numbers() ?>
+                <?= $this->Paginator->next(__('next') . ' >') ?>
+            </ul>
+            <p><?= $this->Paginator->counter() ?></p>
+        </div>
     <?php endif; ?>
     </div>
 </div>

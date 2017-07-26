@@ -22,7 +22,7 @@ class UsersController extends AppController
      */
     public function index()
     {
-        $limit = 5;
+        $limit = LIMIT_PAGINATE;
         if ($this->request->is('post')) {
             if (in_array($this->request->data('recperpageval'),
       [5, 25, 50])) {
@@ -43,11 +43,19 @@ class UsersController extends AppController
      */
     public function view($id = null)
     {
-        $user = $this->Users->get($id, [
-            'contain' => ['Departments']
-        ]);
-
+        $limit = LIMIT_PAGINATE;
+        if ($this->request->is('post')) {
+            if (in_array($this->request->data('recperpageval'),
+    [5, 25, 50])) {
+                $limit = $this->request->data('recperpageval');
+            }
+        }
+        $user = $this->Users->get($id);
+        $departments = $this->Users->Departments->find()->matching('Users', function ($q) use ($user) {
+            return $q->where(['Users.id' => $user->id]);
+        });
         $this->set('user', $user);
+        $this->set('departments', $this->Paginator->paginate($departments, ['limit'=> $limit]));
         $this->set('_serialize', ['user']);
     }
 

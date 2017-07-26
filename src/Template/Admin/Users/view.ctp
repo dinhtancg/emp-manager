@@ -32,26 +32,48 @@
     </table>
     <div class="related">
         <h4><?= __('Related Departments') ?></h4>
-        <?php if (!empty($user->departments)): ?>
+        <div id="recperpage">
+            <?=$this->Form->create(null, [
+            'url' => ['controller' => 'Users', 'action' => 'view', $user->id],
+            'id'  => 'recordsPerPage',
+            ])?>
+        	  <?= $this->Form->select('recperpageval',
+                    [5=>5, 25=>25, 50=>50],
+                    ['default' => 5, 'onchange'=>'onSelectSubmit("recordsPerPage")']
+                )
+            ?>
+            <?=$this->Form->end()?>
+        </div>
+        <hr>
+        <?php
+        if (!empty($departments)): ?>
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <th><?= __('Name') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
-            <?php foreach ($user->departments as $departments): ?>
+            <?php foreach ($departments as $department): ?>
             <tr>
-                <td><?= h($departments->name) ?></td>
+                <td><?= h($department->name) ?></td>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Departments', 'action' => 'view', $departments->id]) ?>
+                    <?= $this->Html->link(__('View'), ['controller' => 'Departments', 'action' => 'view', $department->id]) ?>
 
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Departments', 'action' => 'edit', $departments->id]) ?>
+                    <?= $this->Html->link(__('Edit'), ['controller' => 'Departments', 'action' => 'edit', $department->id]) ?>
 
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Departments', 'action' => 'delete', $departments->id], ['confirm' => __('Are you sure you want to delete # {0}?', $departments->id)]) ?>
+                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Departments', 'action' => 'delete', $department->id], ['confirm' => __('Are you sure you want to delete # {0}?', $department->id)]) ?>
 
                 </td>
             </tr>
             <?php endforeach; ?>
         </table>
+        <div class="paginator">
+            <ul class="pagination">
+                <?= $this->Paginator->prev('< ' . __('previous')) ?>
+                <?= $this->Paginator->numbers() ?>
+                <?= $this->Paginator->next(__('next') . ' >') ?>
+            </ul>
+            <p><?= $this->Paginator->counter() ?></p>
+        </div>
     <?php endif; ?>
     </div>
 </div>

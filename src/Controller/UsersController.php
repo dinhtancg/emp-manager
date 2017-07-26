@@ -21,11 +21,19 @@ class UsersController extends AppController
      */
      public function me()
      {
-         $user = $this->Users->get($this->Auth->user('id'), [
-           'contain' => ['Departments']
-       ]);
-
+         $limit = LIMIT_PAGINATE;
+         if ($this->request->is('post')) {
+             if (in_array($this->request->data('recperpageval'),
+   [5, 25, 50])) {
+                 $limit = $this->request->data('recperpageval');
+             }
+         }
+         $user = $this->Users->get($this->Auth->user('id'));
+         $departments = $this->Users->Departments->find()->matching('Users', function ($q) use ($user) {
+             return $q->where(['Users.id' => $user->id]);
+         });
          $this->set('user', $user);
+         $this->set('departments', $this->Paginator->paginate($departments, ['limit'=> $limit]));
          $this->set('_serialize', ['user']);
      }
 
@@ -38,11 +46,19 @@ class UsersController extends AppController
      */
      public function view($id = null)
      {
-         $user = $this->Users->get($id, [
-             'contain' => ['Departments']
-         ]);
-
+         $limit = LIMIT_PAGINATE;
+         if ($this->request->is('post')) {
+             if (in_array($this->request->data('recperpageval'),
+     [5, 25, 50])) {
+                 $limit = $this->request->data('recperpageval');
+             }
+         }
+         $user = $this->Users->get($id);
+         $departments = $this->Users->Departments->find()->matching('Users', function ($q) use ($user) {
+             return $q->where(['Users.id' => $user->id]);
+         });
          $this->set('user', $user);
+         $this->set('departments', $this->Paginator->paginate($departments, ['limit'=> $limit]));
          $this->set('_serialize', ['user']);
      }
 
@@ -53,8 +69,7 @@ class UsersController extends AppController
      */
     public function add()
     {
-        if ($this->request->session()->read('Auth.User.role') != 1) {
-            // 1 is Admin
+        if ($this->request->session()->read('Auth.User.role') != true) {
             $this->Flash->error(__('Permission denied'));
             $this->redirect(['controller'=> 'users', 'action'=> 'index']);
         }
@@ -102,7 +117,7 @@ class UsersController extends AppController
      */
     public function delete($id = null)
     {
-        if ($id == $this->request->session()->read('Auth.User.id') && $this->request->session()->read('Auth.User.role') != 1) {
+        if ($id == $this->request->session()->read('Auth.User.id') && $this->request->session()->read('Auth.User.role') != true) {
             $this->Flash->error(__('Permission denied'));
             $this->redirect(['controller'=> 'users', 'action'=> 'view',$id]);
         }
@@ -136,8 +151,7 @@ class UsersController extends AppController
                 $this->Auth->setUser($user);
 
                 //check first login
-                // 0 : The user has never logged in before
-                if ($this->Auth->user('first_login') == 0) {
+                if ($this->Auth->user('first_login') == false) {
                     return $this->redirect(['controller' => 'users', 'action'=>'changePassword']);
                 } elseif ($this->Auth->user('role')) {
                     return $this->redirect(['prefix'=>'admin','controller' => 'users', 'action' => 'index']);

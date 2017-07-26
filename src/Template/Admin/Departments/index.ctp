@@ -13,7 +13,7 @@
         'url' => ['controller' => 'Departments', 'action' => 'index'],
         'id'  => 'recordsPerPage',
         ])?>
-    	Records per page: <?= $this->Form->select('recperpageval',
+    	<?= $this->Form->select('recperpageval',
                 [5=>5, 25=>25, 50=>50],
                 ['default' => 5, 'onchange'=>'onSelectSubmit("recordsPerPage")']
             )

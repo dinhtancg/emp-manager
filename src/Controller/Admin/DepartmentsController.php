@@ -19,7 +19,7 @@ class DepartmentsController extends AppController
      */
     public function index()
     {
-        $limit = 5;
+        $limit = LIMIT_PAGINATE;
         if ($this->request->is('post')) {
             if (in_array($this->request->data('recperpageval'),
         [5, 25, 50])) {
@@ -40,11 +40,19 @@ class DepartmentsController extends AppController
      */
     public function view($id = null)
     {
-        $department = $this->Departments->get($id, [
-            'contain' => ['Users']
-        ]);
-
+        $limit = LIMIT_PAGINATE;
+        if ($this->request->is('post')) {
+            if (in_array($this->request->data('recperpageval'),
+      [5, 25, 50])) {
+                $limit = $this->request->data('recperpageval');
+            }
+        }
+        $department = $this->Departments->get($id);
+        $users = $this->Departments->Users->find()->matching('Departments', function ($q) use ($department) {
+            return $q->where(['Departments.id' => $department->id]);
+        });
         $this->set('department', $department);
+        $this->set('users', $this->Paginator->paginate($users, ['limit'=> $limit]));
         $this->set('_serialize', ['department']);
     }
 
@@ -129,10 +137,10 @@ class DepartmentsController extends AppController
 
           // 0  is not manager
           // 1 is manager
-        if ($record[0]->manager == 0) {
-            $record[0]->manager = 1;
+        if ($record[0]->manager == false) {
+            $record[0]->manager = true;
         } else {
-            $record[0]->manager = 0;
+            $record[0]->manager = false;
         }
         if (TableRegistry::get('DepartmentsUsers')->save($record[0])) {
             $this->Flash->success(_('Change manager success'));

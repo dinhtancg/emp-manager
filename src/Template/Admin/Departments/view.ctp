@@ -31,24 +31,37 @@
     </table>
     <div class="related">
         <h4><?= __('Related Employees') ?></h4>
-        <?php if (!empty($department->users)): ?>
+        <div id="recperpage">
+            <?=$this->Form->create(null, [
+            'url' => ['controller' => 'Departments', 'action' => 'view', $department->id],
+            'id'  => 'recordsPerPage',
+            ])?>
+        	  <?= $this->Form->select('recperpageval',
+                    [5=>5, 25=>25, 50=>50],
+                    ['default' => 5, 'onchange'=>'onSelectSubmit("recordsPerPage")']
+                )
+            ?>
+            <?=$this->Form->end()?>
+        </div>
+        <hr>
+        <?php if (!empty($users)): ?>
         <table cellpadding="0" cellspacing="0">
             <tr>
-                <th><?= __('Username') ?></th>
-                <th><?= __('Email') ?></th>
-                <th><?= __('Dob') ?></th>
-                <th><?= __('Avatar') ?></th>
-                <th><?= __('Position') ?></th>
+                <th><?= $this->Paginator->sort('username') ?></th>
+                <th><?= $this->Paginator->sort('email') ?></th>
+                <th><?= $this->Paginator->sort('Date of Birth') ?></th>
+                <th><?= $this->Paginator->sort('avatar') ?></th>
+                <th><?= $this->Paginator->sort('position') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
-            <?php foreach ($department->users as $users): ?>
+            <?php foreach ($users as $user): ?>
             <tr>
-                <td><?= h($users->username) ?></td>
-                <td><?= h($users->email) ?></td>
-                <td><?= h($users->dob) ?></td>
-                <td><img src="<?= '/img/uploads/'.$users->avatar?>" alt="Avatar" width="50px" height="50px"></td>
+                <td><?= h($user->username) ?></td>
+                <td><?= h($user->email) ?></td>
+                <td><?= h($user->dob) ?></td>
+                <td><img src="<?= '/img/uploads/'.$user->avatar?>" alt="Avatar" width="50px" height="50px"></td>
                 <?php
-                if ($users->isManager($users->id, $department->id)) {
+                if ($user->isManager($user->id, $department->id)) {
                     ?>
                 <td>Manager</td>
               <?php
@@ -58,24 +71,32 @@
               <?php
                 } ?>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Users', 'action' => 'view', $users->id]) ?>
+                    <?= $this->Html->link(__('View'), ['controller' => 'Users', 'action' => 'view', $user->id]) ?>
 
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Users', 'action' => 'edit', $users->id]) ?>
+                    <?= $this->Html->link(__('Edit'), ['controller' => 'Users', 'action' => 'edit', $user->id]) ?>
 
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Users', 'action' => 'delete', $users->id], ['confirm' => __('Are you sure you want to delete # {0}?', $users->id)]) ?>
-                    <?php if ($users->isManager($users->id, $department->id)) {
+                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Users', 'action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?>
+                    <?php if ($user->isManager($user->id, $department->id)) {
                     ?>
-                    <?= $this->Form->postLink(__('Down'), ['prefix'=>'admin','controller' => 'Departments', 'action' => 'manager', $department->id, $users->id], ['confirm' => __('Are you sure you want to down user # {0}?', $users->username)]) ?>
+                    <?= $this->Form->postLink(__('Down'), ['prefix'=>'admin','controller' => 'Departments', 'action' => 'manager', $department->id, $user->id], ['confirm' => __('Are you sure you want to down user # {0}?', $user->username)]) ?>
                     <?php
                 } else {
                     ?>
-                    <?= $this->Form->postLink(__('Up'), ['prefix'=>'admin','controller' => 'Departments', 'action' => 'manager', $department->id, $users->id], ['confirm' => __('Are you sure you want to up user # {0}?', $users->username)]) ?>
+                    <?= $this->Form->postLink(__('Up'), ['prefix'=>'admin','controller' => 'Departments', 'action' => 'manager', $department->id, $user->id], ['confirm' => __('Are you sure you want to up user # {0}?', $user->username)]) ?>
                 <?php
                 } ?>
                 </td>
             </tr>
             <?php endforeach; ?>
         </table>
+        <div class="paginator">
+            <ul class="pagination">
+                <?= $this->Paginator->prev('< ' . __('previous')) ?>
+                <?= $this->Paginator->numbers() ?>
+                <?= $this->Paginator->next(__('next') . ' >') ?>
+            </ul>
+            <p><?= $this->Paginator->counter() ?></p>
+        </div>
     <?php endif; ?>
     </div>
 </div>
