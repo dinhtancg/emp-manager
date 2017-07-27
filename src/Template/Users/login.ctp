@@ -1,5 +1,5 @@
-<div class="users index large-5 medium-4 columns content center" id="login-form">
-  <div class="users form">
+<div class="users index large-5 medium-4 columns content center" id="login-form" >
+  <div class="users form"">
   <?= $this->Flash->render('auth') ?>
       <?= $this->Form->create() ?>
       <fieldset>
