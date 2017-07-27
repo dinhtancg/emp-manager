@@ -6,7 +6,7 @@
         <li><?= $this->Html->link(__('New Department'), ['controller' => 'Departments', 'action' => 'add']) ?></li>
     </ul>
 </nav>
-<div class="users form large-9 medium-8 columns content">
+<div class="users form large-5 medium-7 columns content" id="form">
     <?= $this->Form->create($user) ?>
     <fieldset>
         <legend><?= __('Add User') ?></legend>
@@ -15,7 +15,10 @@
             echo $this->Form->input('email');
             echo $this->Form->input('password');
             echo $this->Form->input('confirm_password', ['type'=>'password']);
-            echo $this->Form->input('dob');
+            echo $this->Form->input('dob', [
+              'minYear' => date('Y') - 100,
+              'maxYear' => date('Y')
+              ]);
             echo $this->Form->input('gender', [
               'options' => ['men' =>'Men', 'women' => 'Women','other'=>'Other']
             ]);
@@ -28,25 +31,11 @@
             ]);
             echo $this->Form->hidden('first_login', ['default' => 'false']);
             echo $this->Form->hidden('flag_delete', ['default' => 'false']);
-            echo $this->Form->input('departments._ids', ['options' => $departments]);
+            echo $this->Form->input('departments._ids', ['options' => $departments,'multiple'=>'checkbox']);
         ?>
+        <input type="checkbox" class="checkall" />
+        <label for="checkall" style="color:red">Sellect All Departments</label>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
 </div>
-<script type="text/javascript">
-    function previewFile() {
-      var preview = document.querySelector('img');
-      var file    = document.querySelector('input[type=file]').files[0];
-      var reader  = new FileReader();
-      reader.addEventListener("load", function () {
-          preview.src = reader.result;
-          $('#base64-avatar').val(reader.result);
-          console.log($('#base64-avatar').val());
-        }, false);
-
-        if (file) {
-          reader.readAsDataURL(file);
-        }
-     }
-  </script>

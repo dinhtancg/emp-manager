@@ -26,6 +26,8 @@ $cakeDescription = 'Employees Management System ';
     </title>
     <?= $this->Html->meta('icon') ?>
     <?php echo $this->Html->script('https://code.jquery.com/jquery-3.2.1.min.js') ?>
+    <?= $this->Html->script('ems.js') ?>
+    <?= $this->Html->css('ems.css') ?>
     <?= $this->Html->css('base.css') ?>
     <?= $this->Html->css('cake.css') ?>
 

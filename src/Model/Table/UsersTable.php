@@ -81,7 +81,13 @@ class UsersTable extends Table
                 ]);
         $validator
               ->requirePresence('dob', 'create')
-              ->notEmpty('dob', 'You must enter your dob', 'create');
+              ->notEmpty('dob', 'You must enter your dob', 'create')
+              ->add('dob', 'custom', [
+                'rule' => function ($value) {
+                    return checkdate($value['month'], $value['day'], $value['year']);
+                },
+                'message' => 'The date of birth is invalid!'
+              ]);
         $validator
                     ->requirePresence('avatar', 'create')
                     ->notEmpty('avatar', 'You must choose your avatar!', 'create');

@@ -44,6 +44,7 @@ class AppController extends Controller
         parent::initialize();
 
         $this->loadComponent('RequestHandler');
+        $this->loadComponent('Paginator');
         $this->loadComponent('Flash');
         $this->loadComponent('Auth', [
             'loginRedirect' => [

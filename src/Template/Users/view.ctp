@@ -1,15 +1,10 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit User'), ['action' => 'edit', $user->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete User'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List Users'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New User'), ['action' => 'add']) ?> </li>
         <li><?= $this->Html->link(__('List Departments'), ['controller' => 'Departments', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Department'), ['controller' => 'Departments', 'action' => 'add']) ?> </li>
     </ul>
 </nav>
-<div class="users view large-9 medium-8 columns content">
+<div class="users view large-5 medium-7 columns content" id="form">
     <h3><?= 'Profile of '.h($user->username) ?></h3>
     <table class="vertical-table">
         <tr>
@@ -26,25 +21,36 @@
             <td><?= h($user->email) ?></td>
         </tr>
         <tr>
-            <th><?= __('Dob') ?></th>
+            <th><?= __('Day Of Birth') ?></th>
             <td><?= h($user->dob) ?></td>
         </tr>
     </table>
     <div class="related">
         <h4><?= __('Related Departments') ?></h4>
-        <?php if (!empty($user->departments)): ?>
-        <table cellpadding="0" cellspacing="0">
-            <tr>
-                <th><?= __('Id') ?></th>
-                <th><?= __('Name') ?></th>
-            </tr>
-            <?php foreach ($user->departments as $departments): ?>
-            <tr>
-                <td><?= h($departments->id) ?></td>
-                <td><?= $this->Html->link($departments->name, ['controller' => 'Departments', 'action' => 'view', $departments->id]) ?></td>
-            </tr>
-            <?php endforeach; ?>
-        </table>
+        <div id="recperpage">
+            <?=$this->Form->create(null, [
+            'url' => ['controller' => 'Users', 'action' => '$user', $user->id],
+            'id'  => 'recordsPerPage',
+            ])?>
+        	  <?= $this->Form->select('recperpageval',
+                    [5=>5, 25=>25, 50=>50],
+                    ['default' => 5, 'onchange'=>'onSelectSubmit("recordsPerPage")']
+                )
+            ?>
+            <?=$this->Form->end()?>
+        </div>
+        <hr>
+        <?php if (!empty($departments)): ?>
+          <table cellpadding="0" cellspacing="0">
+              <tr>
+                  <th><?= __('Name') ?></th>
+              </tr>
+              <?php foreach ($departments as $department): ?>
+              <tr>
+                  <td><?= $this->Html->link($department->name, ['controller' => 'Departments', 'action' => 'view', $department->id]) ?></td>
+              </tr>
+              <?php endforeach; ?>
+          </table>
     <?php endif; ?>
     </div>
 </div>

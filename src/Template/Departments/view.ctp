@@ -20,27 +20,48 @@
     </table>
     <div class="related">
         <h4><?= __('Related Employees') ?></h4>
-        <?php if (!empty($department->users)): ?>
-        <table cellpadding="0" cellspacing="0">
+        <div id="recperpage">
+            <?=$this->Form->create(null, [
+            'url' => ['controller' => 'Departments', 'action' => 'view', $department->id],
+            'id'  => 'recordsPerPage',
+            ])?>
+        	<?= $this->Form->select('recperpageval',
+                    [5=>5, 25=>25, 50=>50],
+                    ['default' => 5, 'onchange'=>'onSelectSubmit("recordsPerPage")']
+                )
+            ?>
+            <?=$this->Form->end()?>
+        </div>
+        <hr>
+        <?php if (!empty($users)): ?>
+        <?=$this->Form->create(null, [
+        'url' => ['controller' => 'Departments', 'action' => 'export', $department->id],
+        'id'  => 'exportEmp',
+        ])?>
+        <table cellpadding="0" cellspacing="0" style="word-break:break-word">
             <tr>
-                <th><?= __('Username') ?></th>
-                <th><?= __('Email') ?></th>
-                <th><?= __('Dob') ?></th>
-                <th><?= __('Avatar') ?></th>
-                <th><?= __('Position') ?></th>
+              <th>
+                <input type="checkbox" class="checkall" width="5%" />
+              </th>
+                <th><?= $this->Paginator->sort('username') ?></th>
+                <th><?= $this->Paginator->sort('email') ?></th>
+                <th><?= $this->Paginator->sort('Day of Birth') ?></th>
+                <th><?= $this->Paginator->sort('avatar') ?></th>
+                <th><?= $this->Paginator->sort('position') ?></th>
             </tr>
-            <?php foreach ($department->users as $users): ?>
+            <?php foreach ($users as $user): ?>
             <tr>
+                <td class="select"><?= $this->Form->checkbox($user->username, ['value' => $user->id]) ?></td>
                 <?php if ($loggedUser->isManager($loggedUser->id, $department->id)): ?>
-                  <td><?= $this->Html->link($users->username, ['controller' => 'Users', 'action' => 'view', $users->id]) ?></td>
+                  <td><?= $this->Html->link($user->username, ['controller' => 'Users', 'action' => 'view', $user->id]) ?></td>
                 <?php else: ?>
-                  <td><?= h($users->username) ?></td>
+                  <td><?= h($user->username) ?></td>
                 <?php endif; ?>
 
-                <td><?= h($users->email) ?></td>
-                <td><?= h($users->dob) ?></td>
-                <td><img src="<?= '/img/uploads/'.$users->avatar?>" alt="Avatar" width="50px" height="50px"></td>
-                <?php if ($users->isManager($users->id, $department->id)): ?>
+                <td><?= h($user->email) ?></td>
+                <td><?= h($user->dob) ?></td>
+                <td><img src="<?= '/img/uploads/'.$user->avatar?>" alt="Avatar" width="50px" height="50px"></td>
+                <?php if ($user->isManager($user->id, $department->id)): ?>
                   <td>Manager</td>
                 <?php else: ?>
                   <td>Employees</td>
@@ -48,6 +69,16 @@
             </tr>
             <?php endforeach; ?>
         </table>
+        <div class="paginator">
+            <ul class="pagination">
+                <?= $this->Paginator->prev('< ' . __('previous')) ?>
+                <?= $this->Paginator->numbers() ?>
+                <?= $this->Paginator->next(__('next') . ' >') ?>
+            </ul>
+            <p><?= $this->Paginator->counter() ?></p>
+        </div>
+        <?= $this->Form->button(__('Export to csv')) ?>
+        <?=$this->Form->end()?>
     <?php endif; ?>
     </div>
 

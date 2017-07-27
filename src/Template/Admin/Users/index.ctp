@@ -8,7 +8,20 @@
 </nav>
 <div class="users index large-9 medium-8 columns content">
     <h3><?= __('Users') ?></h3>
-    <table cellpadding="0" cellspacing="0">
+    <div id="recperpage">
+        <?=$this->Form->create(null, [
+        'url' => ['controller' => 'Users', 'action' => 'index'],
+        'id'  => 'recordsPerPage',
+        ])?>
+    	<?= $this->Form->select('recperpageval',
+                [5=>5, 25=>25, 50=>50],
+                ['default' => 5, 'onchange'=>'onSelectSubmit("recordsPerPage")']
+            )
+        ?>
+        <?=$this->Form->end()?>
+    </div>
+    <hr>
+    <table cellpadding="0" cellspacing="0" style="word-break:break-word">
         <thead>
             <tr>
                 <th><?= $this->Paginator->sort('id') ?></th>

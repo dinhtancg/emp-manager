@@ -12,7 +12,7 @@
         <li><?= $this->Html->link(__('New Department'), ['controller' => 'Departments', 'action' => 'add']) ?></li>
     </ul>
 </nav>
-<div class="users form large-9 medium-8 columns content">
+<div class="users form large-5 medium-7 columns content" id="form">
     <?= $this->Form->create($user) ?>
     <fieldset>
         <legend><?= __('Edit User') ?></legend>
@@ -20,7 +20,10 @@
             echo $this->Form->input('username');
             echo $this->Form->input('email');
             echo $this->Form->input('password');
-            echo $this->Form->input('dob');
+            echo $this->Form->input('dob', [
+              'minYear' => date('Y') - 100,
+              'maxYear' => date('Y')
+              ]);
             echo $this->Form->input('gender', [
               'options' => ['men' =>'Men', 'women' => 'Women','other'=>'Other']
             ]);
@@ -28,8 +31,11 @@
               'options' => ['1' =>'Admin', '0' => 'User'],
               'required'=> true
             ]);
-            echo $this->Form->input('departments._ids', ['options' => $departments]);
+            echo $this->Form->input('departments._ids', ['options' => $departments ,'multiple'=>'checkbox']);
         ?>
+        <hr>
+        <input type="checkbox" class="checkall" />
+        <label for="checkall" style="color:red">Sellect All Departments</label>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>

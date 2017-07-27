@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 use Cake\Routing\Router;
 use Cake\Mailer\Email;
+use Cake\I18n\Time;
 
 /**
  * Users Controller
@@ -20,11 +21,19 @@ class UsersController extends AppController
      */
      public function me()
      {
-         $user = $this->Users->get($this->Auth->user('id'), [
-           'contain' => ['Departments']
-       ]);
-
+         $limit = LIMIT_PAGINATE;
+         if ($this->request->is('post')) {
+             if (in_array($this->request->data('recperpageval'),
+   [5, 25, 50])) {
+                 $limit = $this->request->data('recperpageval');
+             }
+         }
+         $user = $this->Users->get($this->Auth->user('id'));
+         $departments = $this->Users->Departments->find()->matching('Users', function ($q) use ($user) {
+             return $q->where(['Users.id' => $user->id]);
+         });
          $this->set('user', $user);
+         $this->set('departments', $this->Paginator->paginate($departments, ['limit'=> $limit]));
          $this->set('_serialize', ['user']);
      }
 
@@ -37,11 +46,19 @@ class UsersController extends AppController
      */
      public function view($id = null)
      {
-         $user = $this->Users->get($id, [
-             'contain' => ['Departments']
-         ]);
-
+         $limit = LIMIT_PAGINATE;
+         if ($this->request->is('post')) {
+             if (in_array($this->request->data('recperpageval'),
+     [5, 25, 50])) {
+                 $limit = $this->request->data('recperpageval');
+             }
+         }
+         $user = $this->Users->get($id);
+         $departments = $this->Users->Departments->find()->matching('Users', function ($q) use ($user) {
+             return $q->where(['Users.id' => $user->id]);
+         });
          $this->set('user', $user);
+         $this->set('departments', $this->Paginator->paginate($departments, ['limit'=> $limit]));
          $this->set('_serialize', ['user']);
      }
 
@@ -52,8 +69,7 @@ class UsersController extends AppController
      */
     public function add()
     {
-        if ($this->request->session()->read('Auth.User.role') != 1) {
-            // 1 is Admin
+        if ($this->request->session()->read('Auth.User.role') != true) {
             $this->Flash->error(__('Permission denied'));
             $this->redirect(['controller'=> 'users', 'action'=> 'index']);
         }
@@ -101,7 +117,7 @@ class UsersController extends AppController
      */
     public function delete($id = null)
     {
-        if ($id == $this->request->session()->read('Auth.User.id') && $this->request->session()->read('Auth.User.role') != 1) {
+        if ($id == $this->request->session()->read('Auth.User.id') && $this->request->session()->read('Auth.User.role') != true) {
             $this->Flash->error(__('Permission denied'));
             $this->redirect(['controller'=> 'users', 'action'=> 'view',$id]);
         }
@@ -125,14 +141,40 @@ class UsersController extends AppController
         if ($this->request->is('post')) {
             $user = $this->Auth->identify();
             if ($user) {
+                //clean login fail information
+                // 0 is default value of login_fail
+//                $user = new \Cake\ORM\Entity()
+                $userS = $this->Users->findById($user['id'])->first();
+                $userS->login_fail = 0;
+                $userS->time_ban = null;
+                $this->Users->save($userS);
                 $this->Auth->setUser($user);
-                if ($this->Auth->user('first_login') == 0) {
-                    // 0 : The user has never logged in before
+
+                //check first login
+                if ($this->Auth->user('first_login') == false) {
                     return $this->redirect(['controller' => 'users', 'action'=>'changePassword']);
                 } elseif ($this->Auth->user('role')) {
                     return $this->redirect(['prefix'=>'admin','controller' => 'users', 'action' => 'index']);
                 } else {
                     return $this->redirect($this->Auth->redirectUrl());
+                }
+            } else {
+                //find user by username
+                $userF = $this->Users->findByUsername($this->request->data['username'])->first();
+                //check time_ban; login_fail count
+                if ($userF) {
+                    if ($userF->time_ban && (time() - $userF->time_ban->toUnixString()) < 0) {
+                        return $this->Flash->error(__('Your account is locked, please login late!'));
+                    } elseif ($userF->login_fail == MAX_LOGIN_FAIL) {
+                        $userF->time_ban = time()+ TIME_BAN ;
+                        $this->Users->save($userF);
+                        return $this->Flash->error(__('Your account has block 10 minutes!'));
+                    } else {
+                        $userF->login_fail ++;
+                        $this->Users->save($userF);
+                    }
+                } else {
+                    return $this->Flash->error(__('Can not found your username!'));
                 }
             }
             $this->Flash->error(__('Invalid username or password, please try again!'));
