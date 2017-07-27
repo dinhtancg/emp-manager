@@ -101,16 +101,35 @@ class DepartmentsController extends AppController
             $this->redirect(['controller'=> 'departments', 'action'=> 'view',$id]);
         }
     }
+    /**
+     * export Employees of Departments to csv file
+     * @param  [type] $id [description]
+     * @return [file] file csv[description]
+     */
     public function export($id = null)
     {
         $department = $this->Departments->get($id, [
           'contain' => ['Users']
       ]);
         $data = [];
-        foreach ($this->request->data as $key => $value) {
-            if ($value != 0) {
-                $user = $this->Departments->Users->findById($value)->toArray();
-                array_push($data, $user[0]);
+        if (array_key_exists('checkall', $this->request->data)) {
+            $not = [];
+            foreach ($this->request->data as $key => $value) {
+                if (is_numeric($value)) {
+                    array_push($not, $key);
+                }
+            }
+            $data = $this->Departments->Users->find('all')
+            ->where(['Users.id NOT IN' => $not])
+            ->matching('Departments', function ($q) use ($department) {
+                return $q->where(['Departments.id' => $department->id]);
+            })->toArray();
+        } else {
+            foreach ($this->request->data as $key => $value) {
+                if (!is_numeric($value)) {
+                    $user = $this->Departments->Users->findById($key)->toArray();
+                    array_push($data, $user[0]);
+                }
             }
         }
         if (empty($data)) {

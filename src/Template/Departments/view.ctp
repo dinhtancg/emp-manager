@@ -2,7 +2,6 @@
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('List Departments'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('Export'), ['controller' => 'Departments', 'action' => 'export', $department->id]) ?></li>
     </ul>
 </nav>
 <div class="departments view large-9 medium-8 columns content">
@@ -41,7 +40,7 @@
         <table cellpadding="0" cellspacing="0" style="word-break:break-word">
             <tr>
               <th>
-                <input type="checkbox" class="checkall" width="5%" />
+                <input type="checkbox" class="checkall" width="5%" name="checkall" value="all" />
               </th>
                 <th><?= $this->Paginator->sort('username') ?></th>
                 <th><?= $this->Paginator->sort('email') ?></th>
@@ -51,7 +50,7 @@
             </tr>
             <?php foreach ($users as $user): ?>
             <tr>
-                <td class="select"><?= $this->Form->checkbox($user->username, ['value' => $user->id]) ?></td>
+                <td class="select"><?= $this->Form->checkbox($user->id, ['value' => $user->username]) ?></td>
                 <?php if ($loggedUser->isManager($loggedUser->id, $department->id)): ?>
                   <td><?= $this->Html->link($user->username, ['controller' => 'Users', 'action' => 'view', $user->id]) ?></td>
                 <?php else: ?>

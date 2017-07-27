@@ -1,3 +1,7 @@
+/**
+ * image to base-64
+ * @return {[type]} [description]
+ */
 function previewFile() {
   var preview = document.querySelector('img');
   var file    = document.querySelector('input[type=file]').files[0];
@@ -12,12 +16,24 @@ function previewFile() {
       reader.readAsDataURL(file);
     }
  }
+ /**
+  * Check all
+  * @return {[type]} [description]
+  */
  $(document).ready(function() {
    $('.checkall').click(function() {
      var checked = $(this).prop('checked');
      $('.select').find('input:checkbox').prop('checked', checked);
    });
  })
+
+
+
+/**
+ * [submit query limit]
+ * @param  {[type]} frmid [description]
+ * @return {[type]}       [description]
+ */
 function onSelectSubmit(frmid)
  {
      document.getElementById(frmid).submit();

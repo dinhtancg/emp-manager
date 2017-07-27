@@ -18,8 +18,10 @@
         <legend><?= __('Edit Department') ?></legend>
         <?php
             echo $this->Form->input('name');
-            echo $this->Form->input('users._ids', ['options' => $users]);
+            echo $this->Form->input('users._ids', ['options' => $users,'multiple'=>'checkbox']);
         ?>
+        <input type="checkbox" class="checkall" />
+        <label for="checkall" style="color:red">Sellect All Users</label>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
