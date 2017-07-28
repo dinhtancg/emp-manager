@@ -5,18 +5,7 @@
     </ul>
 </nav>
 <div class="departments view large-9 medium-8 columns content">
-    <h3><?= h($department->name) ?></h3>
-    <table class="vertical-table">
-        <tr>
-            <th><?= __('Name') ?></th>
-            <td><?= h($department->name) ?></td>
-        </tr>
-        <tr>
-            <th><?= __('Id') ?></th>
-            <td><?= $this->Number->format($department->id) ?></td>
-        </tr>
-        <tr>
-    </table>
+    <h3><?= h($department->name) .' Department'?></h3>
     <div class="related">
         <h4><?= __('Related Employees') ?></h4>
         <div id="recperpage">
@@ -25,8 +14,8 @@
             'id'  => 'recordsPerPage',
             ])?>
         	<?= $this->Form->select('recperpageval',
-                    [5=>5, 25=>25, 50=>50],
-                    ['default' => 5, 'onchange'=>'onSelectSubmit("recordsPerPage")']
+                    [10=>10, 20=>20, 50=>50],
+                    ['default' => 10, 'onchange'=>'onSelectSubmit("recordsPerPage")']
                 )
             ?>
             <?=$this->Form->end()?>
@@ -44,7 +33,7 @@
               </th>
                 <th><?= $this->Paginator->sort('username') ?></th>
                 <th><?= $this->Paginator->sort('email') ?></th>
-                <th><?= $this->Paginator->sort('Day of Birth') ?></th>
+                <th><?= $this->Paginator->sort('Date   of Birth') ?></th>
                 <th><?= $this->Paginator->sort('avatar') ?></th>
                 <th><?= $this->Paginator->sort('position') ?></th>
             </tr>

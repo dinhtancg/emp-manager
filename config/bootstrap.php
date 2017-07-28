@@ -53,6 +53,7 @@ use Cake\Network\Request;
 use Cake\Routing\DispatcherFactory;
 use Cake\Utility\Inflector;
 use Cake\Utility\Security;
+use Cake\I18n\Time;
 
 /**
  * Read configuration file and inject configuration into various
@@ -179,7 +180,7 @@ Request::addDetector('tablet', function ($request) {
  * Plugin::load('Migrations'); //Loads a single plugin named Migrations
  *
  */
-
+Time::setToStringFormat('dd-MM-YYYY');
 Plugin::load('Migrations');
 
 // Only try to load DebugKit in development mode

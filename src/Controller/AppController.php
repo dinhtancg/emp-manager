@@ -29,7 +29,6 @@ use Cake\Mailer\Email;
  */
 class AppController extends Controller
 {
-
     /**
      * Initialization hook method.
      *
@@ -68,7 +67,6 @@ class AppController extends Controller
      */
     public function beforeRender(Event $event)
     {
-        // die('aa');
         if (!array_key_exists('_serialize', $this->viewVars) &&
             in_array($this->response->type(), ['application/json', 'application/xml'])
         ) {
@@ -77,9 +75,7 @@ class AppController extends Controller
     }
     public function beforeFilter(Event $event)
     {
-        if ($this->request->prefix === null) {
-            $this->Auth->allow();
-        }
+        $this->Auth->allow(['login','password']);
     }
     public function isAuthorized($user = null)
     {

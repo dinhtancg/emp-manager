@@ -16,21 +16,19 @@
             echo $this->Form->input('password');
             echo $this->Form->input('confirm_password', ['type'=>'password']);
             echo $this->Form->input('dob', [
-              'minYear' => date('Y') - 100,
+              'minYear' => date('Y') - RANGE_DOB,
               'maxYear' => date('Y')
               ]);
             echo $this->Form->input('gender', [
               'options' => ['men' =>'Men', 'women' => 'Women','other'=>'Other']
             ]);
             echo $this->Form->input('base64-avatar', ['type' => 'hidden']);
-            echo $this->Form->input('avatar', ['type' =>'file', 'onchange' => 'previewFile()']);
-            echo '<img id="pre_img" src="" height="100px" width ="100px" alt="Image preview...">';
+            echo $this->Form->hidden('avatar', ['default' => 'default.png']);
             echo $this->Form->input('role', [
-              'options' => ['1' =>'Admin', '0' => 'User'],
+              'options' => [ '0' => 'User', '1' =>'Admin'],
               'required'=> true
             ]);
             echo $this->Form->hidden('first_login', ['default' => 'false']);
-            echo $this->Form->hidden('flag_delete', ['default' => 'false']);
             echo $this->Form->input('departments._ids', ['options' => $departments,'multiple'=>'checkbox']);
         ?>
         <input type="checkbox" class="checkall" />
