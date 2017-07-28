@@ -6,6 +6,7 @@ use Cake\Routing\Router;
 use Cake\Mailer\Email;
 use Cake\I18n\Time;
 use Cake\Network\Exception\NotFoundException;
+use Cake\ORM\TableRegistry;
 
 /**
  * Users Controller
@@ -58,6 +59,19 @@ class UsersController extends AppController
          $departments = $this->Users->Departments->find()->matching('Users', function ($q) use ($user) {
              return $q->where(['Users.id' => $user->id]);
          });
+         $loggedUser = TableRegistry::get('Users')->get($this->request->session()->read('Auth.User.id'));
+         $checkDepartments = $departments->toArray();
+
+         $isManager = false;
+
+         for ($run=0; $run < count($checkDepartments) ; $run++) {
+             if (in_array($checkDepartments[$run]->id, $loggedUser->managerOf($loggedUser->id))) {
+                 $isManager = true;
+                 break;
+             }
+         }
+
+         $this->set('isManager', $isManager);
          $this->set('user', $user);
          $this->set('departments', $this->Paginator->paginate($departments, ['limit'=> $limit]));
          $this->set('_serialize', ['user']);

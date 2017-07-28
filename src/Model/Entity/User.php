@@ -89,6 +89,17 @@ class User extends Entity
         if (count($query) ==0) {
             return false;
         }
-        return $query[0]->manager;
+        return (bool)$query[0]->manager;
+    }
+    public function managerOf($user_id)
+    {
+        $managers = TableRegistry::get('DepartmentsUsers')
+        ->find('all', ['fields'=>['department_id']])
+        ->where(['user_id' => $user_id, 'manager' => true])->toArray();
+        $listId = [];
+        foreach ($managers as $manager) {
+            array_push($listId, $manager->department_id);
+        }
+        return $listId;
     }
 }
