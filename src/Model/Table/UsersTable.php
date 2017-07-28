@@ -95,7 +95,7 @@ class UsersTable extends Table
             ->requirePresence('role', 'create')
             ->notEmpty('role')
             ->add('role', 'inList', [
-              'rule'=> ['inList', ['1','0']],
+              'rule'=> ['inList', ['0','1']],
               'message' => 'Please enter a valid role'
             ]);
         $validator
@@ -103,7 +103,7 @@ class UsersTable extends Table
             ->notEmpty('gender')
             ->add('gender', 'inList', [
               'rule'=> ['inList', ['men','women','other']],
-              'message' => 'Please enter a valid position.'
+              'message' => 'Please enter a valid gender.'
             ]);
         $validator
             ->requirePresence('first_login', 'create')

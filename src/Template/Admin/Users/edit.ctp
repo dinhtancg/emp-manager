@@ -21,14 +21,14 @@
             echo $this->Form->input('email');
             echo $this->Form->input('password');
             echo $this->Form->input('dob', [
-              'minYear' => date('Y') - 100,
+              'minYear' => date('Y') - RANGE_DOB,
               'maxYear' => date('Y')
               ]);
             echo $this->Form->input('gender', [
               'options' => ['men' =>'Men', 'women' => 'Women','other'=>'Other']
             ]);
             echo $this->Form->input('role', [
-              'options' => ['1' =>'Admin', '0' => 'User'],
+              'options' => ['0' => 'User','1' =>'Admin' ],
               'required'=> true
             ]);
             echo $this->Form->input('departments._ids', ['options' => $departments ,'multiple'=>'checkbox']);

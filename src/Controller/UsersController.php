@@ -5,6 +5,7 @@ use App\Controller\AppController;
 use Cake\Routing\Router;
 use Cake\Mailer\Email;
 use Cake\I18n\Time;
+use Cake\Network\Exception\NotFoundException;
 
 /**
  * Users Controller
@@ -24,7 +25,7 @@ class UsersController extends AppController
          $limit = LIMIT_PAGINATE;
          if ($this->request->is('post')) {
              if (in_array($this->request->data('recperpageval'),
-   [5, 25, 50])) {
+   [10, 20, 50])) {
                  $limit = $this->request->data('recperpageval');
              }
          }
@@ -49,7 +50,7 @@ class UsersController extends AppController
          $limit = LIMIT_PAGINATE;
          if ($this->request->is('post')) {
              if (in_array($this->request->data('recperpageval'),
-     [5, 25, 50])) {
+     [10, 20, 50])) {
                  $limit = $this->request->data('recperpageval');
              }
          }
@@ -92,16 +93,28 @@ class UsersController extends AppController
             'contain' => ['Departments']
         ]);
             if ($this->request->is(['patch', 'post', 'put'])) {
-                $user = $this->Users->patchEntity($user, $this->request->data);
-                if ($user->uploadAvatar($this->request->data['base64-avatar'], $this->request->data['avatar'])) {
+                if ($this->request->data['base64-avatar'] != '' && $this->request->data['avatar']!= '') {
+                    $user = $this->Users->patchEntity($user, $this->request->data);
+                    if ($user->uploadAvatar($this->request->data['base64-avatar'], $this->request->data['avatar'])) {
+                        if ($this->Users->save($user)) {
+                            $this->Flash->success(__('The user has been saved.'));
+                            return $this->redirect(['action' => 'me']);
+                        } else {
+                            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+                        }
+                    } else {
+                        $this->Flash->error(__('The avatar could not be saved. please try again.'));
+                    }
+                } else {
+                    unset($this->request->data['base64-avatar']);
+                    $this->request->data['avatar'] = $user->avatar;
+                    $user = $this->Users->patchEntity($user, $this->request->data);
                     if ($this->Users->save($user)) {
                         $this->Flash->success(__('The user has been saved.'));
                         return $this->redirect(['action' => 'me']);
                     } else {
                         $this->Flash->error(__('The user could not be saved. Please, try again.'));
                     }
-                } else {
-                    $this->Flash->error(__('The avatar could not be saved. please try again.'));
                 }
             }
             $departments = $this->Users->Departments->find('list', ['limit' => QUERY_LIMIT]);

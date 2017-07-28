@@ -14,7 +14,7 @@ use Cake\I18n\Time;
  */
 class UsersController extends AppController
 {
-
+    
     /**
      * Index method
      *
@@ -25,7 +25,7 @@ class UsersController extends AppController
         $limit = LIMIT_PAGINATE;
         if ($this->request->is('post')) {
             if (in_array($this->request->data('recperpageval'),
-      [5, 25, 50])) {
+      [10, 20, 50])) {
                 $limit = $this->request->data('recperpageval');
             }
         }
@@ -46,7 +46,7 @@ class UsersController extends AppController
         $limit = LIMIT_PAGINATE;
         if ($this->request->is('post')) {
             if (in_array($this->request->data('recperpageval'),
-    [5, 25, 50])) {
+    [10, 20, 50])) {
                 $limit = $this->request->data('recperpageval');
             }
         }
@@ -75,20 +75,16 @@ class UsersController extends AppController
               Username :'.$this->request->data('username').',
               password: '. $this->request->data('password').'.
               Welcome!!!';
-            if ($user->uploadAvatar($this->request->data['base64-avatar'], $this->request->data['avatar'])) {
-                if ($this->Users->save($user)) {
-                    $email = new Email();
-                    $email->from(['tanhd070695@gmail.com'=>'Rikkeisoft'])
+            if ($this->Users->save($user)) {
+                $email = new Email();
+                $email->from(['tanhd070695@gmail.com'=>'Rikkeisoft'])
                       ->to($mail)
                       ->subject($subject)
                       ->send($message);
-                    $this->Flash->success(__('The user has been saved.'));
-                    return $this->redirect(['action' => 'index']);
-                } else {
-                    $this->Flash->error(__('The user could not be saved. Please, try again.'));
-                }
+                $this->Flash->success(__('The user has been saved.'));
+                return $this->redirect(['action' => 'index']);
             } else {
-                $this->Flash->error(__('The avatar could not be saved. please try again.'));
+                $this->Flash->error(__('The user could not be saved. Please, try again.'));
             }
         }
         $departments = $this->Users->Departments->find('list', ['limit' => QUERY_LIMIT]);

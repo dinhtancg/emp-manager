@@ -22,7 +22,7 @@ class DepartmentsController extends AppController
         $limit = LIMIT_PAGINATE;
         if ($this->request->is('post')) {
             if (in_array($this->request->data('recperpageval'),
-        [5, 25, 50])) {
+        [10, 20, 50])) {
                 $limit = $this->request->data('recperpageval');
             }
         }
@@ -43,7 +43,7 @@ class DepartmentsController extends AppController
         $limit = LIMIT_PAGINATE;
         if ($this->request->is('post')) {
             if (in_array($this->request->data('recperpageval'),
-      [5, 25, 50])) {
+      [10, 20, 50])) {
                 $limit = $this->request->data('recperpageval');
             }
         }

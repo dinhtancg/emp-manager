@@ -14,8 +14,8 @@
         'id'  => 'recordsPerPage',
         ])?>
     	<?= $this->Form->select('recperpageval',
-                [5=>5, 25=>25, 50=>50],
-                ['default' => 5, 'onchange'=>'onSelectSubmit("recordsPerPage")']
+                [10=>10, 20=>20, 50=>50],
+                ['default' => 10, 'onchange'=>'onSelectSubmit("recordsPerPage")']
             )
         ?>
         <?=$this->Form->end()?>

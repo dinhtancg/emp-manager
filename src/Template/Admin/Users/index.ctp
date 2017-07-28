@@ -14,8 +14,8 @@
         'id'  => 'recordsPerPage',
         ])?>
     	<?= $this->Form->select('recperpageval',
-                [5=>5, 25=>25, 50=>50],
-                ['default' => 5, 'onchange'=>'onSelectSubmit("recordsPerPage")']
+                [10=>10, 20=>20, 50=>50],
+                ['default' => 10, 'onchange'=>'onSelectSubmit("recordsPerPage")']
             )
         ?>
         <?=$this->Form->end()?>
@@ -39,7 +39,11 @@
                 <td><?= h($user->username) ?></td>
                 <td><?= h($user->email) ?></td>
                 <td><?= h($user->dob) ?></td>
-                <td><?= h($user->role) ?></td>
+                <?php if ($user->role): ?>
+                  <td>Admin</td>
+                <?php else: ?>
+                  <td>User</td>
+                <?php endif; ?>
                 <td class="actions">
                     <?= $this->Html->link(__('View'), ['action' => 'view', $user->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id]) ?>

@@ -8,4 +8,8 @@ define('TIME_BAN', '600');
 //max login_fail
 define('MAX_LOGIN_FAIL', '5');
 
-define('LIMIT_PAGINATE', '5');
+//LIMIT_PAGINATE
+define('LIMIT_PAGINATE', '10');
+
+//range ò date of Birth
+define('RANGE_DOB', '100');

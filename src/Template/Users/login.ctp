@@ -1,5 +1,5 @@
-<div class="users content large-5 medium-7" style="margin: auto;" >
-  <div class="users form"">
+<div class="users content large-5 medium-7" style="margin: auto;">
+  <div class="users form">
   <?= $this->Flash->render('auth') ?>
       <?= $this->Form->create() ?>
       <fieldset>
