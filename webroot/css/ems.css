@@ -10,3 +10,6 @@
   float: right;
   padding-bottom: 20px;
 }
+.date select {
+    padding-right: 30px;
+}

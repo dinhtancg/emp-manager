@@ -24,7 +24,7 @@
         <hr>
         <?php if (!empty($users)): ?>
         <?=$this->Form->create(null, [
-        'url' => ['controller' => 'Departments', 'action' => 'export', $department->id],
+        'url' => ['controller' => 'Departments', 'action' => 'export-user', $department->id],
         'id'  => 'exportEmp',
         ])?>
         <table cellpadding="0" cellspacing="0" style="word-break:break-word">
@@ -34,9 +34,9 @@
               </th>
                 <th><?= $this->Paginator->sort('username') ?></th>
                 <th><?= $this->Paginator->sort('email') ?></th>
-                <th><?= $this->Paginator->sort('Date   of Birth') ?></th>
+                <th><?= $this->Paginator->sort('birthday') ?></th>
                 <th><?= $this->Paginator->sort('avatar') ?></th>
-                <th><?= $this->Paginator->sort('position') ?></th>
+                <th><?= __('Position') ?></th>
             </tr>
             <?php foreach ($users as $user): ?>
             <tr>
@@ -48,7 +48,7 @@
                 <?php endif; ?>
 
                 <td><?= h($user->email) ?></td>
-                <td><?= h($user->dob) ?></td>
+                <td><?= h($user->birthday) ?></td>
                 <td><img src="<?= '/img/uploads/'.$user->avatar?>" alt="Avatar" width="50px" height="50px"></td>
                 <?php if ($user->isManager($user->id, $department->id)): ?>
                   <td>Manager</td>

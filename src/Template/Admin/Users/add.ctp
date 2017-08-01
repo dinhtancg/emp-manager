@@ -15,8 +15,8 @@
             echo $this->Form->input('email');
             echo $this->Form->input('password');
             echo $this->Form->input('confirm_password', ['type'=>'password']);
-            echo $this->Form->input('dob', [
-              'minYear' => date('Y') - RANGE_DOB,
+            echo $this->Form->input('birthday', [
+              'minYear' => date('Y') - RANGE_birthday,
               'maxYear' => date('Y')
               ]);
             echo $this->Form->input('gender', [

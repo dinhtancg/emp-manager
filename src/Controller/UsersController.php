@@ -55,26 +55,31 @@ class UsersController extends AppController
                  $limit = $this->request->data('recperpageval');
              }
          }
-         $user = $this->Users->get($id);
-         $departments = $this->Users->Departments->find()->matching('Users', function ($q) use ($user) {
-             return $q->where(['Users.id' => $user->id]);
-         });
-         $loggedUser = TableRegistry::get('Users')->get($this->request->session()->read('Auth.User.id'));
-         $checkDepartments = $departments->toArray();
+         $user = TableRegistry::get('Users')->find()->where(['id'=>$id])->first();
+         if (!$user) {
+             $this->Flash->error(__('User not found!'));
+             $this->redirect(['controller'=> 'users', 'action'=> 'me']);
+         } else {
+             $departments = $this->Users->Departments->find()->matching('Users', function ($q) use ($user) {
+                 return $q->where(['Users.id' => $user->id]);
+             });
+             $loggedUser = TableRegistry::get('Users')->get($this->request->session()->read('Auth.User.id'));
+             $checkDepartments = $departments->toArray();
 
-         $isManager = false;
+             $isManager = false;
 
-         for ($run=0; $run < count($checkDepartments) ; $run++) {
-             if (in_array($checkDepartments[$run]->id, $loggedUser->managerOf($loggedUser->id))) {
-                 $isManager = true;
-                 break;
+             for ($run=0; $run < count($checkDepartments) ; $run++) {
+                 if (in_array($checkDepartments[$run]->id, $loggedUser->managerOf($loggedUser->id))) {
+                     $isManager = true;
+                     break;
+                 }
              }
-         }
 
-         $this->set('isManager', $isManager);
-         $this->set('user', $user);
-         $this->set('departments', $this->Paginator->paginate($departments, ['limit'=> $limit]));
-         $this->set('_serialize', ['user']);
+             $this->set('isManager', $isManager);
+             $this->set('user', $user);
+             $this->set('departments', $this->Paginator->paginate($departments, ['limit'=> $limit]));
+             $this->set('_serialize', ['user']);
+         }
      }
 
     /**
@@ -108,6 +113,7 @@ class UsersController extends AppController
         ]);
             if ($this->request->is(['patch', 'post', 'put'])) {
                 if ($this->request->data['base64-avatar'] != '' && $this->request->data['avatar']!= '') {
+                    $this->request->data['avatar'] = $user->username.$this->request->data['avatar'];
                     $user = $this->Users->patchEntity($user, $this->request->data);
                     if ($user->uploadAvatar($this->request->data['base64-avatar'], $this->request->data['avatar'])) {
                         if ($this->Users->save($user)) {
@@ -237,10 +243,10 @@ class UsersController extends AppController
             if ($this->Users->save($user)) {
                 $this->Flash->success(__('The password is successfully changed'));
 
-                if ($user['role'] === 'admin') {
-                    $this->redirect('/admin/users/index');
+                if ($user['role'] == true) {
+                    $this->redirect('/admin/users');
                 } else {
-                    $this->redirect('/users/index');
+                    $this->redirect('/users');
                 }
             } else {
                 $this->Flash->error(__('There was an error during the save!'));

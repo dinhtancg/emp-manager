@@ -26,8 +26,8 @@
             <td><?= $this->Number->format($user->id) ?></td>
         </tr>
         <tr>
-            <th><?= __('Dob') ?></th>
-            <td><?= h($user->dob) ?></td>
+            <th><?= __('birthday') ?></th>
+            <td><?= h($user->birthday) ?></td>
         </tr>
     </table>
     <div class="related">

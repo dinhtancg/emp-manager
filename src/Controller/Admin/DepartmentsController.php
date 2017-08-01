@@ -47,13 +47,18 @@ class DepartmentsController extends AppController
                 $limit = $this->request->data('recperpageval');
             }
         }
-        $department = $this->Departments->get($id);
-        $users = $this->Departments->Users->find()->matching('Departments', function ($q) use ($department) {
-            return $q->where(['Departments.id' => $department->id]);
-        });
-        $this->set('department', $department);
-        $this->set('users', $this->Paginator->paginate($users, ['limit'=> $limit]));
-        $this->set('_serialize', ['department']);
+        $department = TableRegistry::get('Departments')->find()->where(['id'=>$id])->first();
+        if (!$department) {
+            $this->Flash->error(__('Department not found!'));
+            $this->redirect(['controller'=> 'Departments', 'action'=> 'index']);
+        } else {
+            $users = $this->Departments->Users->find()->matching('Departments', function ($q) use ($department) {
+                return $q->where(['Departments.id' => $department->id]);
+            });
+            $this->set('department', $department);
+            $this->set('users', $this->Paginator->paginate($users, ['limit'=> $limit]));
+            $this->set('_serialize', ['department']);
+        }
     }
 
     /**

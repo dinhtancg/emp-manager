@@ -7,6 +7,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 use SoftDelete\Model\Table\SoftDeleteTrait;
+use Cake\Auth\DefaultPasswordHasher;
 
 /**
  * Users Model
@@ -77,12 +78,12 @@ class UsersTable extends Table
             ])
                 ->add('password', 'custom', [
                     'rule' => [$this, 'checkCharacters'],
-                    'message' => 'The password must contain 1 number, 1 uppercase, 1 lowercase, and 1 special character'
+                    'message' => 'The password must contain at least 1 number, 1 uppercase, 1 lowercase, and 1 special character'
                 ]);
         $validator
-              ->requirePresence('dob', 'create')
-              ->notEmpty('dob', 'You must enter your dob', 'create')
-              ->add('dob', 'custom', [
+              ->requirePresence('birthday', 'create')
+              ->notEmpty('birthday', 'You must enter your birthday', 'create')
+              ->add('birthday', 'custom', [
                 'rule' => function ($value) {
                     return checkdate($value['month'], $value['day'], $value['year']);
                 },
@@ -166,7 +167,7 @@ class UsersTable extends Table
 
                ->add('password1', 'custom', [
                    'rule' => [$this, 'checkCharacters'],
-                   'message' => 'The password must contain 1 number, 1 uppercase, 1 lowercase, and 1 special character'
+                   'message' => 'The password must contain at least 1 number, 1 uppercase, 1 lowercase, and 1 special character'
                ]);
         $validator
                   ->requirePresence('password2', 'create')
@@ -184,7 +185,7 @@ class UsersTable extends Table
 
                   ->add('password', 'custom', [
                       'rule' => [$this, 'checkCharacters'],
-                      'message' => 'The password must contain 1 number, 1 uppercase, 1 lowercase, and 1 special character'
+                      'message' => 'The password must contain at least 1 number, 1 uppercase, 1 lowercase, and 1 special character'
                   ]);
 
         return $validator;

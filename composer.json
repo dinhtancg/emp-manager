@@ -11,7 +11,8 @@
         "cakephp/migrations": "~1.0",
         "cakephp/plugin-installer": "*",
         "friendsofcake/cakephp-csvview": "~3.0",
-        "pgbi/cakephp3-soft-delete": "~1.0"
+        "pgbi/cakephp3-soft-delete": "~1.0",
+        "phpoffice/phpexcel": "^1.8"
     },
     "require-dev": {
         "psy/psysh": "@stable",

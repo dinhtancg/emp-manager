@@ -13,15 +13,15 @@
         <?php
             echo $this->Form->input('username');
             echo $this->Form->input('email');
-            echo $this->Form->input('password', ['required'=> true]);
-            echo $this->Form->input('dob', [
-              'minYear' => date('Y') - RANGE_DOB,
+            echo $this->Form->input('birthday', [
+              'minYear' => date('Y') - RANGE_birthday,
               'maxYear' => date('Y'),
               'required'=> true
               ]);
+            echo "<br>";
+            echo $this->Html->image('uploads/'.$user->avatar, ['alt' => 'Avatar']);
             echo $this->Form->input('base64-avatar', ['type' => 'hidden']);
             echo $this->Form->input('avatar', ['type' =>'file', 'onchange' => 'previewFile()']);
-            echo '<img id="pre_img" src="" height="100px" width ="100px" alt="Image preview...">';
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

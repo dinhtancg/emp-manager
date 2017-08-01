@@ -12,4 +12,4 @@ define('MAX_LOGIN_FAIL', '5');
 define('LIMIT_PAGINATE', '10');
 
 //range ò date of Birth
-define('RANGE_DOB', '100');
+define('RANGE_birthday', '100');

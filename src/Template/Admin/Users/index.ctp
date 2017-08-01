@@ -4,6 +4,7 @@
         <li><?= $this->Html->link(__('New User'), ['action' => 'add']) ?></li>
         <li><?= $this->Html->link(__('List Departments'), ['controller' => 'Departments', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New Department'), ['controller' => 'Departments', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('Reset Password'), ['controller' => 'Users', 'action' => 'password']) ?></li>
     </ul>
 </nav>
 <div class="users index large-9 medium-8 columns content">
@@ -27,7 +28,7 @@
                 <th><?= $this->Paginator->sort('id') ?></th>
                 <th><?= $this->Paginator->sort('username') ?></th>
                 <th><?= $this->Paginator->sort('email') ?></th>
-                <th><?= $this->Paginator->sort('dob') ?></th>
+                <th><?= $this->Paginator->sort('birthday') ?></th>
                 <th><?= $this->Paginator->sort('role') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
@@ -38,7 +39,7 @@
                 <td><?= $this->Number->format($user->id) ?></td>
                 <td><?= h($user->username) ?></td>
                 <td><?= h($user->email) ?></td>
-                <td><?= h($user->dob) ?></td>
+                <td><?= h($user->birthday) ?></td>
                 <?php if ($user->role): ?>
                   <td>Admin</td>
                 <?php else: ?>

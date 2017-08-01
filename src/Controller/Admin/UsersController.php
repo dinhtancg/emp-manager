@@ -14,7 +14,7 @@ use Cake\I18n\Time;
  */
 class UsersController extends AppController
 {
-    
+
     /**
      * Index method
      *
@@ -50,13 +50,18 @@ class UsersController extends AppController
                 $limit = $this->request->data('recperpageval');
             }
         }
-        $user = $this->Users->get($id);
-        $departments = $this->Users->Departments->find()->matching('Users', function ($q) use ($user) {
-            return $q->where(['Users.id' => $user->id]);
-        });
-        $this->set('user', $user);
-        $this->set('departments', $this->Paginator->paginate($departments, ['limit'=> $limit]));
-        $this->set('_serialize', ['user']);
+        $user = TableRegistry::get('Users')->find()->where(['id'=> $id])->first();
+        if (!$user) {
+            $this->Flash->error(__('User not found!'));
+            $this->redirect(['controller'=> 'users', 'action'=> 'index']);
+        } else {
+            $departments = $this->Users->Departments->find()->matching('Users', function ($q) use ($user) {
+                return $q->where(['Users.id' => $user->id]);
+            });
+            $this->set('user', $user);
+            $this->set('departments', $this->Paginator->paginate($departments, ['limit'=> $limit]));
+            $this->set('_serialize', ['user']);
+        }
     }
 
     /**

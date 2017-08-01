@@ -12,7 +12,7 @@ use Cake\ORM\TableRegistry;
  * @property string $username
  * @property string $email
  * @property string $password
- * @property \Cake\I18n\Time $dob
+ * @property \Cake\I18n\Time $birthday
  * @property string $avatar
  * @property bool $role
  * @property bool $first_login

@@ -24,7 +24,7 @@
           </tr>
           <tr>
               <th><?= __('Day Of Birth') ?></th>
-              <td><?= h($user->dob) ?></td>
+              <td><?= h($user->birthday) ?></td>
           </tr>
       </table>
       <div class="related">

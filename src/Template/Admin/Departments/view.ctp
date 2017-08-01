@@ -49,16 +49,16 @@
             <tr>
                 <th><?= $this->Paginator->sort('username') ?></th>
                 <th><?= $this->Paginator->sort('email') ?></th>
-                <th><?= $this->Paginator->sort('Date of Birth') ?></th>
+                <th><?= $this->Paginator->sort('birthday') ?></th>
                 <th><?= $this->Paginator->sort('avatar') ?></th>
-                <th><?= $this->Paginator->sort('position') ?></th>
+                <th><?= __('Position') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($users as $user): ?>
             <tr>
                 <td><?= h($user->username) ?></td>
                 <td><?= h($user->email) ?></td>
-                <td><?= h($user->dob) ?></td>
+                <td><?= h($user->birthday) ?></td>
                 <td><img src="<?= '/img/uploads/'.$user->avatar?>" alt="Avatar" width="50px" height="50px"></td>
                 <?php
                 if ($user->isManager($user->id, $department->id)) {
