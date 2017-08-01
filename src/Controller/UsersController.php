@@ -176,7 +176,6 @@ class UsersController extends AppController
             if ($user) {
                 //clean login fail information
                 // 0 is default value of login_fail
-//                $user = new \Cake\ORM\Entity()
                 $userS = $this->Users->findById($user['id'])->first();
                 $userS->login_fail = 0;
                 $userS->time_ban = null;
@@ -187,7 +186,7 @@ class UsersController extends AppController
                 if ($this->Auth->user('first_login') == false) {
                     return $this->redirect(['controller' => 'users', 'action'=>'changePassword']);
                 } elseif ($this->Auth->user('role')) {
-                    return $this->redirect(['prefix'=>'admin','controller' => 'users', 'action' => 'index']);
+                    return $this->redirect(['prefix'=>'admin','controller' => 'users', 'action' => 'loginAs']);
                 } else {
                     return $this->redirect($this->Auth->redirectUrl());
                 }

@@ -2,11 +2,15 @@
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('Edit User'), ['action' => 'edit', $user->id]) ?> </li>
+        <?php if ($this->request->session()->read('Auth.User.id') != $user->id): ?>
         <li><?= $this->Form->postLink(__('Delete User'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?> </li>
+        <?php endif; ?>
         <li><?= $this->Html->link(__('List Users'), ['action' => 'index']) ?> </li>
         <li><?= $this->Html->link(__('New User'), ['action' => 'add']) ?> </li>
         <li><?= $this->Html->link(__('List Departments'), ['controller' => 'Departments', 'action' => 'index']) ?> </li>
         <li><?= $this->Html->link(__('New Department'), ['controller' => 'Departments', 'action' => 'add']) ?> </li>
+        <li><?= $this->Html->link(__('Switch role'), ['controller' => 'Users', 'action' => 'loginAs']) ?></li>
+
     </ul>
 </nav>
 <div class="users view large-5 medium-7 columns content" id="form">
@@ -50,19 +54,10 @@
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <th><?= __('Name') ?></th>
-                <th class="actions"><?= __('Actions') ?></th>
             </tr>
             <?php foreach ($departments as $department): ?>
             <tr>
-                <td><?= h($department->name) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Departments', 'action' => 'view', $department->id]) ?>
-
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Departments', 'action' => 'edit', $department->id]) ?>
-
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Departments', 'action' => 'delete', $department->id], ['confirm' => __('Are you sure you want to delete # {0}?', $department->id)]) ?>
-
-                </td>
+                <td><?= $this->Html->link($department->name, ['controller' => 'Departments', 'action' => 'view', $department->id]) ?></td>
             </tr>
             <?php endforeach; ?>
         </table>

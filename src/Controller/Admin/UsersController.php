@@ -14,6 +14,10 @@ use Cake\I18n\Time;
  */
 class UsersController extends AppController
 {
+    public function loginAs()
+    {
+        # code...
+    }
 
     /**
      * Index method

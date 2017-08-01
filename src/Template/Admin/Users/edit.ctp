@@ -10,6 +10,7 @@
         <li><?= $this->Html->link(__('List Users'), ['action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('List Departments'), ['controller' => 'Departments', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New Department'), ['controller' => 'Departments', 'action' => 'add']) ?></li>
+        <li><?= $this->Html->link(__('Switch role'), ['controller' => 'Users', 'action' => 'loginAs']) ?></li>
     </ul>
 </nav>
 <div class="users form large-5 medium-7 columns content" id="form">
@@ -19,7 +20,6 @@
         <?php
             echo $this->Form->input('username');
             echo $this->Form->input('email');
-            echo $this->Form->input('password');
             echo $this->Form->input('birthday', [
               'minYear' => date('Y') - RANGE_birthday,
               'maxYear' => date('Y')

@@ -2,6 +2,10 @@
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('Edit Profile'), ['action' => 'edit', $user->id]) ?> </li>
+        <li><?= $this->Html->link(__('Change password'), ['controller' => 'Users', 'action' => 'changePassword']) ?></li>
+        <?php if ($this->request->session()->read('Auth.User.role')): ?>
+          <li><?= $this->Html->link(__('Switch role'), ['prefix' => 'admin', 'controller' => 'Users', 'action' => 'loginAs']) ?></li>
+        <?php endif; ?>
         <li><?= $this->Html->link(__('List Departments'), ['controller' => 'Departments', 'action' => 'index']) ?> </li>
     </ul>
 </nav>

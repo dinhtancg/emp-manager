@@ -3,7 +3,9 @@
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('List Departments'), ['controller' => 'Departments', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('My Profile'), ['controller' => 'Users', 'action' => 'me']) ?></li>
-
+        <?php if ($this->request->session()->read('Auth.User.role')): ?>
+          <li><?= $this->Html->link(__('Switch role'), ['prefix'=>'admin', 'controller' => 'Users', 'action' => 'loginAs']) ?></li>
+        <?php endif; ?>
     </ul>
 </nav>
 <div class="users form large-5 medium-7 columns content" id="form">

@@ -2,6 +2,9 @@
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('My profile'), ['controller' => 'Users', 'action' => 'me']) ?></li>
+        <?php if ($this->request->session()->read('Auth.User.role')): ?>
+          <li><?= $this->Html->link(__('Switch role'), ['prefix'=>'admin', 'controller' => 'Users', 'action' => 'loginAs']) ?></li>
+        <?php endif; ?>
     </ul>
 </nav>
 <div class="departments index large-5 medium-7 columns content" id="form">
@@ -22,14 +25,12 @@
     <table cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th><?= $this->Paginator->sort('id') ?></th>
                 <th><?= $this->Paginator->sort('name') ?></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($departments as $department): ?>
             <tr>
-                <td><?= $this->Number->format($department->id) ?></td>
                 <td><?= $this->Html->link($department->name, ['action' => 'view', $department->id]) ?></td>
 
             </tr>

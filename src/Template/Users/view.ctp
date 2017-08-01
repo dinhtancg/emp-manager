@@ -1,8 +1,12 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List Departments'), ['controller' => 'Departments', 'action' => 'index']) ?> </li>
         <li><?= $this->Html->link(__('My Profile'), ['controller' => 'Users', 'action' => 'me']) ?></li>
+        <li><?= $this->Html->link(__('Change password'), ['controller' => 'Users', 'action' => 'changePassword']) ?></li>
+        <?php if ($this->request->session()->read('Auth.User.role')): ?>
+          <li><?= $this->Html->link(__('Switch role'), ['prefix'=>'admin', 'controller' => 'Users', 'action' => 'loginAs']) ?></li>
+        <?php endif; ?>
+        <li><?= $this->Html->link(__('List Departments'), ['controller' => 'Departments', 'action' => 'index']) ?> </li>
     </ul>
 </nav>
 <?php if ($isManager): ?>

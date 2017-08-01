@@ -5,6 +5,8 @@
         <li><?= $this->Html->link(__('List Departments'), ['controller' => 'Departments', 'action' => 'index']) ?></li>
         <li><?= $this->Html->link(__('New Department'), ['controller' => 'Departments', 'action' => 'add']) ?></li>
         <li><?= $this->Html->link(__('Reset Password'), ['controller' => 'Users', 'action' => 'password']) ?></li>
+        <li><?= $this->Html->link(__('Switch role'), ['controller' => 'Users', 'action' => 'loginAs']) ?></li>
+
     </ul>
 </nav>
 <div class="users index large-9 medium-8 columns content">
@@ -37,7 +39,7 @@
             <?php foreach ($users as $user): ?>
             <tr>
                 <td><?= $this->Number->format($user->id) ?></td>
-                <td><?= h($user->username) ?></td>
+                <td><?= $this->Html->link($user->username, ['action' => 'view', $user->id]) ?></td>
                 <td><?= h($user->email) ?></td>
                 <td><?= h($user->birthday) ?></td>
                 <?php if ($user->role): ?>
@@ -46,9 +48,12 @@
                   <td>User</td>
                 <?php endif; ?>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $user->id]) ?>
+
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?>
+                    <?php if ($this->request->session()->read('Auth.User.id') != $user->id): ?>
+                      <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?>
+                    <?php endif; ?>
+
                 </td>
             </tr>
             <?php endforeach; ?>

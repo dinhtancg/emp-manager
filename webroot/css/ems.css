@@ -13,3 +13,12 @@
 .date select {
     padding-right: 30px;
 }
+a.button {
+  width: 50%;
+  background: #18ace4;
+  margin-left: 25%;
+}
+h1 {
+  color: red;
+  text-align: center;
+}
