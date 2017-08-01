@@ -187,9 +187,9 @@ class UsersController extends AppController
                 if ($this->Auth->user('first_login') == false) {
                     return $this->redirect(['controller' => 'users', 'action'=>'changePassword']);
                 } elseif ($this->Auth->user('role')) {
-                    return $this->redirect(['prefix'=>'admin','controller' => 'users', 'action' => 'index']);
+                    return $this->redirect(['prefix'=>'admin','controller' => 'Users', 'action' => 'index']);
                 } else {
-                    return $this->redirect($this->Auth->redirectUrl());
+                    return $this->redirect(['prefix'=>false,'controller' => 'Departments', 'action' => 'index']);
                 }
             } else {
                 //find user by username
