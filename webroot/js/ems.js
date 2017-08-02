@@ -27,8 +27,6 @@ function previewFile() {
    });
  })
 
-
-
 /**
  * [submit query limit]
  * @param  {[type]} frmid [description]

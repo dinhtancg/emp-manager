@@ -16,12 +16,13 @@ use Cake\ORM\TableRegistry;
 class UsersController extends AppController
 {
 
+
     /**
      * Index method
      *
      * @return \Cake\Network\Response|null
      */
-     public function me()
+     public function index()
      {
          $limit = LIMIT_PAGINATE;
          if ($this->request->is('post')) {
@@ -58,7 +59,7 @@ class UsersController extends AppController
          $user = TableRegistry::get('Users')->find()->where(['id'=>$id])->first();
          if (!$user) {
              $this->Flash->error(__('User not found!'));
-             $this->redirect(['controller'=> 'users', 'action'=> 'me']);
+             $this->redirect(['controller'=> 'users', 'action'=> 'index']);
          } else {
              $departments = $this->Users->Departments->find()->matching('Users', function ($q) use ($user) {
                  return $q->where(['Users.id' => $user->id]);
@@ -118,7 +119,7 @@ class UsersController extends AppController
                     if ($user->uploadAvatar($this->request->data['base64-avatar'], $this->request->data['avatar'])) {
                         if ($this->Users->save($user)) {
                             $this->Flash->success(__('The user has been saved.'));
-                            return $this->redirect(['action' => 'me']);
+                            return $this->redirect(['action' => 'index']);
                         } else {
                             $this->Flash->error(__('The user could not be saved. Please, try again.'));
                         }
@@ -131,7 +132,7 @@ class UsersController extends AppController
                     $user = $this->Users->patchEntity($user, $this->request->data);
                     if ($this->Users->save($user)) {
                         $this->Flash->success(__('The user has been saved.'));
-                        return $this->redirect(['action' => 'me']);
+                        return $this->redirect(['action' => 'index']);
                     } else {
                         $this->Flash->error(__('The user could not be saved. Please, try again.'));
                     }
@@ -277,5 +278,9 @@ class UsersController extends AppController
                 }
             }
         }
+    }
+    public function resetSuccess()
+    {
+        # code...
     }
 }

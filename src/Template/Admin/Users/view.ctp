@@ -1,13 +1,9 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit User'), ['action' => 'edit', $user->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete User'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List Users'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New User'), ['action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Departments'), ['controller' => 'Departments', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New Department'), ['controller' => 'Departments', 'action' => 'add']) ?> </li>
-    </ul>
+  <ul class="side-nav">
+      <li class="heading"><?= __('Actions') ?></li>
+      <li><?= $this->Html->link(__('New User'), ['action' => 'add']) ?></li>
+      <li><?= $this->Html->link(__('Reset Password'), ['controller' => 'Users', 'action' => 'password']) ?></li>
+  </ul>
 </nav>
 <div class="users view large-5 medium-7 columns content" id="form">
     <h3><?= 'Profile of '.h($user->username) ?></h3>
@@ -49,20 +45,15 @@
         if (!empty($departments)): ?>
         <table cellpadding="0" cellspacing="0">
             <tr>
-                <th><?= __('Name') ?></th>
-                <th class="actions"><?= __('Actions') ?></th>
+                <th><?= __('Username')?></th>
+                <th><?= __('Number Employees')?></th>
+                <th><?= __('Created')?></th>
             </tr>
             <?php foreach ($departments as $department): ?>
             <tr>
-                <td><?= h($department->name) ?></td>
-                <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Departments', 'action' => 'view', $department->id]) ?>
-
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Departments', 'action' => 'edit', $department->id]) ?>
-
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Departments', 'action' => 'delete', $department->id], ['confirm' => __('Are you sure you want to delete # {0}?', $department->id)]) ?>
-
-                </td>
+                <td><?= $this->Html->link($department->name, ['controller' => 'Departments', 'action' => 'view', $department->id]) ?></td>
+                <td><?= $department->countNumberEmp($department->id) ?></td>
+                <td><?= h($department->created) ?></td>
             </tr>
             <?php endforeach; ?>
         </table>

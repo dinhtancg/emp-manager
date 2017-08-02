@@ -40,7 +40,12 @@ $cakeDescription = 'Employees Management System ';
     <nav class="top-bar expanded" data-topbar role="navigation">
         <ul class="title-area large-3 medium-4 columns">
             <li class="name">
-              <h1><a href="">EMS</a></h1>
+              <?php if ($this->request->session()->read('Auth.User.role') == true): ?>
+                <h1><a href="/admin/users" style="text-align:center;">EMS</a></h1>
+              <?php else: ?>
+                <h1><a href="/departments" style="text-align:center;">EMS</a></h1>
+              <?php endif; ?>
+
             </li>
 
         </ul>
@@ -48,21 +53,21 @@ $cakeDescription = 'Employees Management System ';
         <?php else: ?>
           <?php if ($this->request->session()->read('Auth.User.role') == true): ?>
             <ul class="large-2 medium-3 columns">
-              <li class="name">
-                  <h1> <?= $this->Html->link(__('Employees'),
+              <li class="name" id="tab">
+                  <h1> <?= $this->PVHtml->link(__('Employees'),
                    ['prefix'=>'admin', 'controller'=> 'Users', 'action'=>'index']) ?></h1>
               </li>
             </ul>
             <ul class="large-2 medium-3 columns">
-              <li class="name">
-                  <h1> <?= $this->Html->link(__('Departments'),
+              <li class="name" id="tab">
+                  <h1> <?= $this->PVHtml->link(__('Departments'),
                    ['prefix'=>'admin', 'controller'=> 'Departments', 'action'=>'index']) ?></h1>
               </li>
             </ul>
           <?php else: ?>
             <ul class="large-2 medium-3 columns">
-              <li class="name">
-                  <h1> <?= $this->Html->link(__('Departments'),
+              <li class="name" id="tab">
+                  <h1> <?= $this->PVHtml->link(__('Departments'),
                    ['prefix'=>false, 'controller'=> 'Departments', 'action'=>'index']) ?></h1>
               </li>
             </ul>
@@ -72,13 +77,11 @@ $cakeDescription = 'Employees Management System ';
             <ul class="right">
               <?php if ($this->request->session()->read('Auth.User.id')): ?>
                 <li>
-                <div class="dropdown">
-                    <?= $this->Html->link($this->request->session()->read('Auth.User.username'), ['prefix'=> false, 'controller' => 'Users','action'=> 'me'], ['class' => 'dropbtn']) ?>
+                    <?= $this->Html->link($this->request->session()->read('Auth.User.username'), ['prefix'=> false, 'controller' => 'Users','action'=> 'index'], ['class' => 'btn']) ?>
                     <div class="dropdown-content">
-                      <?= $this->Html->link('Edit Profile', ['controller'=>'Users', 'action'=>'edit', 'prefix' => false]) ?>
+                      <?= $this->Html->link('Edit Profile', [ 'prefix' => false, 'controller'=>'Users', 'action'=>'edit', $this->request->session()->read('Auth.User.id')]) ?>
                       <?= $this->Html->link('Change Password', ['controller'=>'Users', 'action'=>'changePassword', 'prefix' => false]) ?>
                     </div>
-                  </div>
                 </li>
                 <li><?= $this->Html->link('Logout', ['controller'=>'users', 'action'=>'logout', 'prefix' => false]) ?></li>
               <?php else: ?>

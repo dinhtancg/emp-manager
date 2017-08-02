@@ -53,7 +53,7 @@ Router::scope('/', function ($routes) {
      * ...and connect the rest of 'Pages' controller's URLs.
      */
     $routes->connect('/pages/*', ['controller' => 'Pages', 'action' => 'display']);
-    $routes->connect('/users', ['controller' => 'users', 'action'=>'me']);
+    $routes->connect('/users', ['controller' => 'users', 'action'=>'index']);
     $routes->connect('/users/login', ['controller' => 'users', 'action'=>'login']);
     $routes->connect('/users/logout', ['controller' => 'users', 'action'=>'logout']);
     /**

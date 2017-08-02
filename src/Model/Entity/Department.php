@@ -2,6 +2,7 @@
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\ORM\TableRegistry;
 
 /**
  * Department Entity.
@@ -28,4 +29,8 @@ class Department extends Entity
         '*' => true,
         'id' => false,
     ];
+    public function countNumberEmp($department_id)
+    {
+        return count(TableRegistry::get('DepartmentsUsers')->find()->where(['department_id' => $department_id])->toArray());
+    }
 }

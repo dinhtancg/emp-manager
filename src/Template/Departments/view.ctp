@@ -1,8 +1,6 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List Departments'), ['action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('My profile'), ['controller' => 'Users', 'action' => 'me']) ?></li>
+        <li class="heading"><?= __('Welcome') ?></li>
     </ul>
 </nav>
 <div class="departments view large-9 medium-8 columns content">
@@ -40,7 +38,7 @@
             </tr>
             <?php foreach ($users as $user): ?>
             <tr>
-                <td class="select"><?= $this->Form->checkbox($user->id, ['value' => $user->username]) ?></td>
+                <td class="select"><?= $this->Form->checkbox($user->id) ?></td>
                 <?php if ($loggedUser->isManager($loggedUser->id, $department->id)): ?>
                   <td><?= $this->Html->link($user->username, ['controller' => 'Users', 'action' => 'view', $user->id]) ?></td>
                 <?php else: ?>

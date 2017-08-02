@@ -1,8 +1,6 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List Departments'), ['controller' => 'Departments', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('My Profile'), ['controller' => 'Users', 'action' => 'me']) ?></li>
     </ul>
 </nav>
 <?php if ($isManager): ?>
@@ -45,11 +43,15 @@
           <?php if (!empty($departments)): ?>
             <table cellpadding="0" cellspacing="0">
                 <tr>
-                    <th><?= __('Name') ?></th>
+                    <th><?= __('Username')?></th>
+                    <th><?= __('Number Employees')?></th>
+                    <th><?= __('Created')?></th>
                 </tr>
                 <?php foreach ($departments as $department): ?>
                 <tr>
                     <td><?= $this->Html->link($department->name, ['controller' => 'Departments', 'action' => 'view', $department->id]) ?></td>
+                    <td><?= $department->countNumberEmp($department->id) ?></td>
+                    <td><?= h($user->birthday) ?></td>
                 </tr>
                 <?php endforeach; ?>
             </table>
