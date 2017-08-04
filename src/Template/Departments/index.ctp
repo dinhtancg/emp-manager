@@ -1,7 +1,6 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('My profile'), ['controller' => 'Users', 'action' => 'me']) ?></li>
+        <li class="heading"><?= __('Welcome') ?></li>
     </ul>
 </nav>
 <div class="departments index large-5 medium-7 columns content" id="form">
@@ -20,21 +19,18 @@
     </div>
     <hr>
     <table cellpadding="0" cellspacing="0">
-        <thead>
             <tr>
-                <th><?= $this->Paginator->sort('id') ?></th>
                 <th><?= $this->Paginator->sort('name') ?></th>
+                <th><?= __('Number Employees')?></th>
+                <th><?= $this->Paginator->sort('created') ?></th>
             </tr>
-        </thead>
-        <tbody>
             <?php foreach ($departments as $department): ?>
             <tr>
-                <td><?= $this->Number->format($department->id) ?></td>
                 <td><?= $this->Html->link($department->name, ['action' => 'view', $department->id]) ?></td>
-
+                <td><?= $department->countNumberEmp($department->id) ?></td>
+                <td><?= h($department->created) ?></td>
             </tr>
             <?php endforeach; ?>
-        </tbody>
     </table>
     <div class="paginator">
         <ul class="pagination">

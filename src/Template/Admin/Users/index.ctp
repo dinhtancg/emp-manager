@@ -2,9 +2,6 @@
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
         <li><?= $this->Html->link(__('New User'), ['action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('List Departments'), ['controller' => 'Departments', 'action' => 'index']) ?></li>
-        <li><?= $this->Html->link(__('New Department'), ['controller' => 'Departments', 'action' => 'add']) ?></li>
-        <li><?= $this->Html->link(__('Reset Password'), ['controller' => 'Users', 'action' => 'password']) ?></li>
     </ul>
 </nav>
 <div class="users index large-9 medium-8 columns content">
@@ -22,11 +19,20 @@
         <?=$this->Form->end()?>
     </div>
     <hr>
+    <?=$this->Form->create(null, [
+    'url' => ['controller' => 'Users', 'action' => 'password'],
+    'id'  => 'resetPasswod',
+    ])?>
+    <?= $this->Form->button(__('Reset Password'), ['id' => 'reset_button']) ?>
     <table cellpadding="0" cellspacing="0" style="word-break:break-word">
         <thead>
             <tr>
+                <th width="5%">
+                  <input type="checkbox" class="checkall"  name="checkall" value="all" />
+                </th>
                 <th><?= $this->Paginator->sort('id') ?></th>
                 <th><?= $this->Paginator->sort('username') ?></th>
+                <th><?= $this->Paginator->sort('full_name') ?></th>
                 <th><?= $this->Paginator->sort('email') ?></th>
                 <th><?= $this->Paginator->sort('birthday') ?></th>
                 <th><?= $this->Paginator->sort('role') ?></th>
@@ -36,8 +42,10 @@
         <tbody>
             <?php foreach ($users as $user): ?>
             <tr>
+                <td class="select"><?= $this->Form->checkbox($user->id) ?></td>
                 <td><?= $this->Number->format($user->id) ?></td>
-                <td><?= h($user->username) ?></td>
+                <td><?= $this->Html->link($user->username, ['action' => 'view', $user->id]) ?></td>
+                <td><?= h($user->full_name) ?></td>
                 <td><?= h($user->email) ?></td>
                 <td><?= h($user->birthday) ?></td>
                 <?php if ($user->role): ?>
@@ -46,9 +54,11 @@
                   <td>User</td>
                 <?php endif; ?>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['action' => 'view', $user->id]) ?>
                     <?= $this->Html->link(__('Edit'), ['action' => 'edit', $user->id]) ?>
-                    <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?>
+                    &nbsp;&nbsp;
+                    <?php if ($this->request->session()->read('Auth.User.id') != $user->id): ?>
+                        <?= $this->Form->postLink(__('Delete'), ['action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?>
+                    <?php endif; ?>
                 </td>
             </tr>
             <?php endforeach; ?>
@@ -62,4 +72,6 @@
         </ul>
         <p><?= $this->Paginator->counter() ?></p>
     </div>
+
+    <?=$this->Form->end()?>
 </div>

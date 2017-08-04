@@ -48,6 +48,9 @@ class DepartmentsController extends AppController
             }
         }
         $department = TableRegistry::get('Departments')->find()->where(['id'=>$id])->first();
+        $numEmp = count(TableRegistry::get('DepartmentsUsers')->find()->where(['department_id' => $department->id])->toArray());
+        // debug($numEmp);
+        // die;
         if (!$department) {
             $this->Flash->error(__('Department not found!'));
             $this->redirect(['controller'=> 'Departments', 'action'=> 'index']);
@@ -56,6 +59,7 @@ class DepartmentsController extends AppController
                 return $q->where(['Departments.id' => $department->id]);
             });
             $this->set('department', $department);
+            $this->set('numEmp', $numEmp);
             $this->set('users', $this->Paginator->paginate($users, ['limit'=> $limit]));
             $this->set('_serialize', ['department']);
         }

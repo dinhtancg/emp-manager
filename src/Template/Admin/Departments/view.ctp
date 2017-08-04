@@ -1,17 +1,12 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
         <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit Department'), ['action' => 'edit', $department->id]) ?> </li>
-        <li><?= $this->Form->postLink(__('Delete Department'), ['action' => 'delete', $department->id], ['confirm' => __('Are you sure you want to delete # {0}?', $department->id)]) ?> </li>
-        <li><?= $this->Html->link(__('List Departments'), ['action' => 'index']) ?> </li>
         <li><?= $this->Html->link(__('New Department'), ['action' => 'add']) ?> </li>
-        <li><?= $this->Html->link(__('List Users'), ['controller' => 'Users', 'action' => 'index']) ?> </li>
-        <li><?= $this->Html->link(__('New User'), ['controller' => 'Users', 'action' => 'add']) ?> </li>
     </ul>
 </nav>
 <div class="departments view large-9 medium-8 columns content">
     <h3><?= h($department->name) ?></h3>
-    <table class="vertical-table">
+    <table class="vertical-table large-6 medium-6">
         <tr>
             <th><?= __('Name') ?></th>
             <td><?= h($department->name) ?></td>
@@ -19,6 +14,10 @@
         <tr>
             <th><?= __('Id') ?></th>
             <td><?= $this->Number->format($department->id) ?></td>
+        </tr>
+        <tr>
+          <th><?= __('Number Employees')?></th>
+          <td><?= $department->countNumberEmp($department->id) ?></td>
         </tr>
         <tr>
             <th><?= __('Created') ?></th>
@@ -48,6 +47,7 @@
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <th><?= $this->Paginator->sort('username') ?></th>
+                <th><?= $this->Paginator->sort('full_name') ?></th>
                 <th><?= $this->Paginator->sort('email') ?></th>
                 <th><?= $this->Paginator->sort('birthday') ?></th>
                 <th><?= $this->Paginator->sort('avatar') ?></th>
@@ -56,9 +56,10 @@
             </tr>
             <?php foreach ($users as $user): ?>
             <tr>
-                <td><?= h($user->username) ?></td>
+                <td><?= $this->Html->link($user->username, ['controller' => 'Users', 'action' => 'view', $user->id]) ?></td>
+                <td><?= h($user->full_name)?></td>
                 <td><?= h($user->email) ?></td>
-                <td><?= h($user->birthday) ?></td>
+                <td><?= h($user->birthday)?></td>
                 <td><img src="<?= '/img/uploads/'.$user->avatar?>" alt="Avatar" width="50px" height="50px"></td>
                 <?php
                 if ($user->isManager($user->id, $department->id)) {
@@ -71,11 +72,10 @@
               <?php
                 } ?>
                 <td class="actions">
-                    <?= $this->Html->link(__('View'), ['controller' => 'Users', 'action' => 'view', $user->id]) ?>
-
                     <?= $this->Html->link(__('Edit'), ['controller' => 'Users', 'action' => 'edit', $user->id]) ?>
-
+                    &nbsp;&nbsp;
                     <?= $this->Form->postLink(__('Delete'), ['controller' => 'Users', 'action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?>
+                    &nbsp;&nbsp;
                     <?php if ($user->isManager($user->id, $department->id)) {
                     ?>
                     <?= $this->Form->postLink(__('Down'), ['prefix'=>'admin','controller' => 'Departments', 'action' => 'manager', $department->id, $user->id], ['confirm' => __('Are you sure you want to down user # {0}?', $user->username)]) ?>

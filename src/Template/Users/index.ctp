@@ -1,8 +1,6 @@
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
     <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('Edit Profile'), ['action' => 'edit', $user->id]) ?> </li>
-        <li><?= $this->Html->link(__('List Departments'), ['controller' => 'Departments', 'action' => 'index']) ?> </li>
+        <li class="heading"><?= __('Welcome') ?></li>
     </ul>
 </nav>
 <div class="users view large-5 medium-7 columns content" id="form">
@@ -22,8 +20,8 @@
             <td><?= h($user->email) ?></td>
         </tr>
         <tr>
-            <th><?= __('Id') ?></th>
-            <td><?= $this->Number->format($user->id) ?></td>
+            <th><?= __('Fullname') ?></th>
+            <td><?= h($user->full_name) ?></td>
         </tr>
         <tr>
             <th><?= __('birthday') ?></th>
@@ -47,13 +45,17 @@
         <hr>
         <?php if (!empty($departments)): ?>
         <table cellpadding="0" cellspacing="0">
-            <tr>
-                <th><?= __('Name') ?></th>
-            </tr>
+          <tr>
+              <th><?= __('Username')?></th>
+              <th><?= __('Number Employees')?></th>
+              <th><?= __('Created')?></th>
+          </tr>
             <?php foreach ($departments as $department): ?>
-            <tr>
-                <td><?= $this->Html->link($department->name, ['controller' => 'Departments', 'action' => 'view', $department->id]) ?></td>
-            </tr>
+              <tr>
+                  <td><?= $this->Html->link($department->name, ['controller' => 'Departments', 'action' => 'view', $department->id]) ?></td>
+                  <td><?= $department->countNumberEmp($department->id) ?></td>
+                  <td><?= h($user->birthday) ?></td>
+              </tr>
             <?php endforeach; ?>
         </table>
         <div class="paginator">

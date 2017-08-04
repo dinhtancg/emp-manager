@@ -120,15 +120,16 @@ class DepartmentsController extends AppController
      */
     public function exportUser($id = null)
     {
+        $datas = $this->request->data;
         $department = $this->Departments->get($id, [
           'contain' => ['Users']
       ]);
         $data = [];
-        if (array_key_exists('checkall', $this->request->data)) {
+        if (array_key_exists('checkall', $datas)) {
             $not = [];
-            foreach ($this->request->data as $key => $value) {
-                if (is_numeric($value)) {
-                    array_push($not, $key);
+            foreach ($datas as $key => $value) {
+                if (empty($value)) {
+                    $not[] = $key;
                 }
             }
             if (empty($not)) {
@@ -141,12 +142,17 @@ class DepartmentsController extends AppController
               })->toArray();
             }
         } else {
-            foreach ($this->request->data as $key => $value) {
-                if (!is_numeric($value)) {
-                    $user = $this->Departments->Users->findById($key)->toArray();
-                    array_push($data, $user[0]);
+            $ids = [];
+            foreach ($datas as $key => $value) {
+                if (!empty($value)) {
+                    $ids[] = $key;
                 }
             }
+            $data = $this->Departments->Users->find('all')
+              ->where(['Users.id IN' => $ids])
+              ->matching('Departments', function ($q) use ($department) {
+                  return $q->where(['Departments.id' => $department->id]);
+              })->toArray();
         }
         if (empty($data)) {
             $this->Flash->error(__('Please choose Employees to export!'));
@@ -174,7 +180,7 @@ class DepartmentsController extends AppController
             $objPHPExcel->getActiveSheet()->setCellValue('B'.$i, $employee->username);
             $objPHPExcel->getActiveSheet()->setCellValue('C'.$i, $employee->email);
             $objPHPExcel->getActiveSheet()->setCellValue('D'.$i, $employee->gender);
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i, $employee->birthday);
+            $objPHPExcel->getActiveSheet()->setCellValue('E'.$i, date('d-m-Y', strtotime($employee->birthday)));
         }
 
         // Rename sheet

@@ -66,6 +66,15 @@ class UsersTable extends Table
             ->add('email', 'valid', ['rule' => 'email'])
             ->requirePresence('email', 'create')
             ->notEmpty('email');
+        $validator
+            ->requirePresence('full_name', 'create')
+            ->notEmpty('full_name')
+            ->add('full_name', [
+                'length' => [
+                    'rule' => ['minLength', 3],
+                    'message' => 'The fullname have to be at least 3 characters!',
+                ]
+            ]);
 
         $validator
                 ->requirePresence('password', 'create')
