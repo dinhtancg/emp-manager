@@ -20,8 +20,8 @@
             <td><?= h($user->email) ?></td>
         </tr>
         <tr>
-            <th><?= __('Id') ?></th>
-            <td><?= $this->Number->format($user->id) ?></td>
+            <th><?= __('Fullname') ?></th>
+            <td><?= h($user->full_name) ?></td>
         </tr>
         <tr>
             <th><?= __('birthday') ?></th>

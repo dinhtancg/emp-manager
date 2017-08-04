@@ -2,7 +2,6 @@
   <ul class="side-nav">
       <li class="heading"><?= __('Actions') ?></li>
       <li><?= $this->Html->link(__('New User'), ['action' => 'add']) ?></li>
-      <li><?= $this->Html->link(__('Reset Password'), ['controller' => 'Users', 'action' => 'password']) ?></li>
   </ul>
 </nav>
 <div class="users form large-5 medium-7 columns content" id="form">
@@ -12,6 +11,7 @@
         <?php
             echo $this->Form->input('username');
             echo $this->Form->input('email');
+            echo $this->Form->input('full_name');
             echo $this->Form->input('password');
             echo $this->Form->input('confirm_password', ['type'=>'password']);
             echo $this->Form->input('birthday', [

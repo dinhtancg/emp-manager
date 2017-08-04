@@ -2,7 +2,6 @@
   <ul class="side-nav">
       <li class="heading"><?= __('Actions') ?></li>
       <li><?= $this->Html->link(__('New User'), ['action' => 'add']) ?></li>
-      <li><?= $this->Html->link(__('Reset Password'), ['controller' => 'Users', 'action' => 'password']) ?></li>
   </ul>
 </nav>
 <div class="users view large-5 medium-7 columns content" id="form">
@@ -16,6 +15,10 @@
         <tr>
             <th><?= __('Username') ?></th>
             <td><?= h($user->username) ?></td>
+        </tr>
+        <tr>
+            <th><?= __('Fullname') ?></th>
+            <td><?= h($user->full_name) ?></td>
         </tr>
         <tr>
             <th><?= __('Email') ?></th>

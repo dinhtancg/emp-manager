@@ -10,6 +10,7 @@
         <?php
             echo $this->Form->input('username');
             echo $this->Form->input('email');
+            echo $this->Form->input('full_name');
             echo $this->Form->input('birthday', [
               'minYear' => date('Y') - RANGE_birthday,
               'maxYear' => date('Y'),

@@ -18,6 +18,7 @@ use Cake\Controller\Controller;
 use Cake\Event\Event;
 use Cake\Routing\Router;
 use Cake\Mailer\Email;
+use Cake\ORM\TableRegistry;
 
 /**
  * Application Controller
@@ -55,7 +56,6 @@ class AppController extends Controller
                 'action' => 'login',
             ],
             'authorize' => ['Controller'],
-            'authError' => 'Access Denied'
         ]);
     }
 
@@ -76,6 +76,14 @@ class AppController extends Controller
     public function beforeFilter(Event $event)
     {
         $this->Auth->allow(['login','password','reset','resetSuccess']);
+        // debug($this->request->session()->read('Auth.User.first_login'));
+        // die;
+        if ($this->request->session()->read('Auth.User.id')) {
+            $user = TableRegistry::get('Users')->find()->where(['id'=>$this->request->session()->read('Auth.User.id')])->first();
+            if ($user['first_login'] != $this->request->session()->read('Auth.User.first_login')) {
+                $this->redirect('/users/logout');
+            }
+        }
     }
     public function isAuthorized($user = null)
     {
@@ -100,7 +108,12 @@ class AppController extends Controller
     public function sendResetEmail($url, $user)
     {
         $email = new Email();
-        $email-> template('resetpw');
+
+        if (!$this->request->session()->read('Auth.User.id')) {
+            $email-> template('resetpw');
+        } else {
+            $email-> template('adminresetpw');
+        }
         $email->emailFormat('both');
         $email->from('tanhd070695@gmail.com');
         $email->to($user->email, $user->username);

@@ -125,7 +125,7 @@ class DepartmentsController extends AppController
           'contain' => ['Users']
       ]);
         $data = [];
-        if (array_key_exists('checkall', $this->request->data)) {
+        if (array_key_exists('checkall', $datas)) {
             $not = [];
             foreach ($datas as $key => $value) {
                 if (empty($value)) {

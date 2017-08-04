@@ -6,7 +6,7 @@
 </nav>
 <div class="departments view large-9 medium-8 columns content">
     <h3><?= h($department->name) ?></h3>
-    <table class="vertical-table">
+    <table class="vertical-table large-6 medium-6">
         <tr>
             <th><?= __('Name') ?></th>
             <td><?= h($department->name) ?></td>
@@ -16,7 +16,7 @@
             <td><?= $this->Number->format($department->id) ?></td>
         </tr>
         <tr>
-          <th><?= __('Number of Employees')?></th>
+          <th><?= __('Number Employees')?></th>
           <td><?= $department->countNumberEmp($department->id) ?></td>
         </tr>
         <tr>
@@ -47,6 +47,7 @@
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <th><?= $this->Paginator->sort('username') ?></th>
+                <th><?= $this->Paginator->sort('full_name') ?></th>
                 <th><?= $this->Paginator->sort('email') ?></th>
                 <th><?= $this->Paginator->sort('birthday') ?></th>
                 <th><?= $this->Paginator->sort('avatar') ?></th>
@@ -56,8 +57,9 @@
             <?php foreach ($users as $user): ?>
             <tr>
                 <td><?= $this->Html->link($user->username, ['controller' => 'Users', 'action' => 'view', $user->id]) ?></td>
+                <td><?= h($user->full_name)?></td>
                 <td><?= h($user->email) ?></td>
-                <td><?= h($user->birthday) ?></td>
+                <td><?= h($user->birthday)?></td>
                 <td><img src="<?= '/img/uploads/'.$user->avatar?>" alt="Avatar" width="50px" height="50px"></td>
                 <?php
                 if ($user->isManager($user->id, $department->id)) {

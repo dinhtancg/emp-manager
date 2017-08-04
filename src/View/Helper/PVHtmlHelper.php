@@ -22,7 +22,9 @@ class PVHtmlHelper extends Helper
         if ($title == null || $url == null) {
             return;
         }
-        $class = ($this->request->params['controller'] == $url['controller']) ? 'active' :'';
+
+        $params = $this->request->params;
+        $class = ($params['controller'] == $url['controller']) ? 'active' :'';
         echo "<li class='" . $class . "'>" . $this->Html->link($title, $url) . "</li>";
     }
 }

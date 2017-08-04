@@ -17,9 +17,14 @@
               <td><?= h($user->username) ?></td>
           </tr>
           <tr>
+              <th><?= __('Fullname') ?></th>
+              <td><?= h($user->full_name) ?></td>
+          </tr>
+          <tr>
               <th><?= __('Email') ?></th>
               <td><?= h($user->email) ?></td>
           </tr>
+
           <tr>
               <th><?= __('Day Of Birth') ?></th>
               <td><?= h($user->birthday) ?></td>

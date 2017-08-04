@@ -237,7 +237,7 @@ class UsersController extends AppController
               'password' => $this->request->data['password1'],
               'password1' => $this->request->data['password1'],
               'password2' => $this->request->data['password2'],
-              'first_login' => 'true'
+              'first_login' => true
             ],
             ['validate' => 'password']
             );

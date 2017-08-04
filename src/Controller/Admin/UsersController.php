@@ -6,6 +6,7 @@ use Cake\Mailer\Email;
 use Cake\Routing\Router;
 use Cake\ORM\TableRegistry;
 use Cake\I18n\Time;
+use Cake\Auth\DefaultPasswordHasher;
 
 /**
  * Users Controller
@@ -147,26 +148,46 @@ class UsersController extends AppController
      */
     public function password()
     {
-        if ($this->request->is('post')) {
-            $arrayIds = $this->request->data['users']['_ids'];
-            foreach ($arrayIds as $id) {
-                $user = $this->Users->findById($id)->first();
-                if (!$user) {
-                    $this->Flash->error(__('User does not exist. Please try again!'));
-                } else {
-                    $pass_key = uniqid();
-                    $url = Router::Url(['controller' =>'users', 'action' => 'reset'], true).'/'. $pass_key;
-                    $url= str_replace("/admin", "", $url);
-                    $timeout = time()+ DAY;
-                    if ($this->Users->updateAll(['pass_key' => $pass_key, 'timeout' => $timeout], ['id' => $user->id])) {
-                        $this->sendResetEmail($url, $user);
-                    } else {
-                        $this->Flash->error('Error saving reset pass_key/ timeout');
-                    }
+        $datas = $this->request->data();
+        $users = [];
+        if (array_key_exists('checkall', $datas)) {
+            $not = [1];
+            foreach ($datas as $key => $value) {
+                if (empty($value)) {
+                    $not[] = $key;
                 }
             }
+            $users = $this->Users->find('all')
+              ->where(['Users.id NOT IN' => $not])
+              ->toArray();
+        } else {
+            $ids = [];
+            foreach ($datas as $key => $value) {
+                if (!empty($value)) {
+                    $ids[] = $key;
+                }
+            }
+            if (empty($ids)) {
+                $this->Flash->error(__('Please choose Employees to reset password!'));
+                $this->redirect(['controller' => 'Users', 'action'=> 'index']);
+            } else {
+                $users = $this->Users->find('all')
+                ->where(['Users.id IN' => $ids])
+                ->toArray();
+            }
         }
-        $users = $this->Users->find('list', ['limit' => QUERY_LIMIT]);
-        $this->set(compact('users'));
+        if (empty($users)) {
+            $this->Flash->error(__('Please choose Employees to reset password!'));
+            $this->redirect(['controller' => 'Users', 'action'=> 'index']);
+        }
+        foreach ($users as $user) {
+            $pass_key = uniqid();
+            if ($this->Users->updateAll(['password' => (new DefaultPasswordHasher)->hash($pass_key), 'first_login' => false], ['id' => $user->id])) {
+                $this->sendResetEmail($pass_key, $user);
+            } else {
+                $this->Flash->error('Error saving reset pass_key');
+            }
+        }
+        $this->redirect(['controller' => 'Users', 'action'=> 'index']);
     }
 }

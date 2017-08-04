@@ -53,20 +53,20 @@ $cakeDescription = 'Employees Management System ';
         <?php else: ?>
           <?php if ($this->request->session()->read('Auth.User.role') == true): ?>
             <ul class="large-2 medium-3 columns">
-              <li class="name" id="tab">
+              <li class="name tab">
                   <h1> <?= $this->PVHtml->link(__('Employees'),
                    ['prefix'=>'admin', 'controller'=> 'Users', 'action'=>'index']) ?></h1>
               </li>
             </ul>
             <ul class="large-2 medium-3 columns">
-              <li class="name" id="tab">
+              <li class="name tab">
                   <h1> <?= $this->PVHtml->link(__('Departments'),
                    ['prefix'=>'admin', 'controller'=> 'Departments', 'action'=>'index']) ?></h1>
               </li>
             </ul>
           <?php else: ?>
             <ul class="large-2 medium-3 columns">
-              <li class="name" id="tab">
+              <li class="name tab">
                   <h1> <?= $this->PVHtml->link(__('Departments'),
                    ['prefix'=>false, 'controller'=> 'Departments', 'action'=>'index']) ?></h1>
               </li>
@@ -77,7 +77,7 @@ $cakeDescription = 'Employees Management System ';
             <ul class="right">
               <?php if ($this->request->session()->read('Auth.User.id')): ?>
                 <li>
-                    <?= $this->Html->link($this->request->session()->read('Auth.User.username'), ['prefix'=> false, 'controller' => 'Users','action'=> 'index'], ['class' => 'btn']) ?>
+                    <?= $this->Html->link($this->request->session()->read('Auth.User.username'), ['prefix'=> false, 'controller' => 'Users','action'=> 'in'], ['class' => 'btn']) ?>
                     <div class="dropdown-content">
                       <?= $this->Html->link('Edit Profile', [ 'prefix' => false, 'controller'=>'Users', 'action'=>'edit', $this->request->session()->read('Auth.User.id')]) ?>
                       <?= $this->Html->link('Change Password', ['controller'=>'Users', 'action'=>'changePassword', 'prefix' => false]) ?>
