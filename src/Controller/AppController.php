@@ -76,12 +76,17 @@ class AppController extends Controller
     public function beforeFilter(Event $event)
     {
         $this->Auth->allow(['login','password','reset','resetSuccess']);
-        // debug($this->request->session()->read('Auth.User.first_login'));
-        // die;
         if ($this->request->session()->read('Auth.User.id')) {
             $user = TableRegistry::get('Users')->find()->where(['id'=>$this->request->session()->read('Auth.User.id')])->first();
             if ($user['first_login'] != $this->request->session()->read('Auth.User.first_login')) {
                 $this->redirect('/users/logout');
+            }
+        }
+
+        if (array_key_exists('prefix', $this->request->params)) {
+            if ($this->request->params['prefix'] == 'admin' && $this->request->session()->read('Auth.User.role') == false) {
+                $this->Flash->error(__('You can not access permissions!'));
+                return $this->redirect(['prefix'=> false, 'controller'=>'Users', 'action' => 'index']);
             }
         }
     }

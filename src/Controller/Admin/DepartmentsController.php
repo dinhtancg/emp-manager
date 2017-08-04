@@ -144,8 +144,6 @@ class DepartmentsController extends AppController
           ->find('all')
           ->where(['user_id' => $user_id, 'department_id' => $department_id])->toArray();
 
-          // 0  is not manager
-          // 1 is manager
         if ($record[0]->manager == false) {
             $record[0]->manager = true;
         } else {

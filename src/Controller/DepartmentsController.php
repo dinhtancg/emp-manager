@@ -164,7 +164,11 @@ class DepartmentsController extends AppController
 
         $objPHPExcel->getProperties()->setCreator("TanHD");
 
+
         //HEADER
+        //apply the style on column A row 1 to Column B row 1
+        $objPHPExcel->getActiveSheet()->getStyle('A1:E1')->applyFromArray(['font' => ['size' => 12,'bold' => true,'color' => ['rgb' => '#000000']]]);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:E1')->getFill()->setFillType(\PHPExcel_Style_Fill::FILL_SOLID)->getStartColor()->setARGB('696969');
         $i=1;
         $objPHPExcel->setActiveSheetIndex(0);
         $objPHPExcel->getActiveSheet()->setCellValue('A'.$i, ' ID');
