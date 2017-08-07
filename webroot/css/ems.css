@@ -51,9 +51,7 @@ li.tab {
 li.tab:hover {
   text-decoration: underline;
 }
-li.tab:active {
-  background-color: green;
-}
 li.tab li.active {
-  background-color: green !important;
+  color: red !important;
+  text-decoration: underline !important;
 }

@@ -23,15 +23,20 @@ class UsersController extends AppController
      */
     public function index()
     {
-        $limit = LIMIT_PAGINATE;
+        $sessionLimit = $this->request->session()->read('users.index.limit');
+        $limit = $sessionLimit ? $this->request->session()->read('users.index.limit') : LIMIT_PAGINATE;
         if ($this->request->is('post')) {
+            // debug($this->request->data);
+            // die;
             if (in_array($this->request->data('recperpageval'),
       [10, 20, 50])) {
                 $limit = $this->request->data('recperpageval');
+                $this->request->session()->write('users.index.limit', $limit);
             }
         }
+
         $users = $this->Paginator->paginate($this->Users, ['limit' =>$limit]);
-        $this->set(compact('users'));
+        $this->set(compact('users', 'sessionLimit'));
         $this->set('_serialize', ['users']);
     }
 

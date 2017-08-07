@@ -13,7 +13,7 @@
         ])?>
     	<?= $this->Form->select('recperpageval',
                 [10=>10, 20=>20, 50=>50],
-                ['default' => 10, 'onchange'=>'onSelectSubmit("recordsPerPage")']
+                ['default' => $sessionLimit, 'onchange'=>'onSelectSubmit("recordsPerPage")']
             )
         ?>
         <?=$this->Form->end()?>

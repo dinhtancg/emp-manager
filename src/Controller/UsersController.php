@@ -242,6 +242,7 @@ class UsersController extends AppController
             ['validate' => 'password']
             );
             if ($this->Users->save($user)) {
+                $this->request->session()->write('Auth.User.first_login', true);
                 $this->Flash->success(__('The password is successfully changed'));
 
                 if ($user['role'] == true) {
