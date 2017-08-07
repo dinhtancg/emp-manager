@@ -29,7 +29,25 @@ class UsersController extends AppController
       [10, 20, 50])) {
                 $limit = $this->request->data('recperpageval');
             }
+            // if (!empty($this->request->data['search']) && isset($this->request->data['search'])) {
+            //     $search_key = trim($this->request->data['search']);
+            //     $conditions= [
+            //     "OR" => [
+            //       'username LIKE' => '%' .$search_key. '%',
+            //       'email LIKE' => '%' . $search_key . '%',
+            //       'full_name LIKE' => '%' . $search_key . '%'
+            //     ]];
+            // } else {
+            //     $conditions = null;
+            // }
         }
+        // else {
+        //     $conditions = null;
+        // }
+        // $this->Paginator->settings = [
+        //   'conditions' => $conditions,
+        //   'limit' => $limit
+        // ];
         $users = $this->Paginator->paginate($this->Users, ['limit' =>$limit]);
         $this->set(compact('users'));
         $this->set('_serialize', ['users']);
@@ -190,4 +208,19 @@ class UsersController extends AppController
         }
         $this->redirect(['controller' => 'Users', 'action'=> 'index']);
     }
+    // public function search()
+    // {
+    //     $limit = LIMIT_PAGINATE;
+    //     if ($this->request->is('post')) {
+    //         if (!empty($this->request->data) && isset($this->request->data)) {
+    //             $search_key = trim($this->request->data['search']);
+    //             $users= $this->Users->find('all')
+    //             ->where(['username LIKE' => '%' .$search_key. '%'])
+    //             ->orWhere(['email LIKE' => '%' . $search_key . '%'])
+    //             ->orWhere(['full_name LIKE' => '%' . $search_key . '%']);
+    //         }
+    //     }
+    //     $this->set('users', $this->Paginator->paginate($users, ['limit'=> $limit]));
+    //     $this->render('index');
+    // }
 }

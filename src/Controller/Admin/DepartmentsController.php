@@ -82,7 +82,7 @@ class DepartmentsController extends AppController
                 $this->Flash->error(__('The department could not be saved. Please, try again.'));
             }
         }
-        $users = $this->Departments->Users->find('list', ['limit' => QUERY_LIMIT]);
+        $users = $this->Departments->Users->find('list')->where(['Users.username !=' => 'admin']);
         $this->set(compact('department', 'users'));
         $this->set('_serialize', ['department']);
     }
@@ -108,7 +108,7 @@ class DepartmentsController extends AppController
                 $this->Flash->error(__('The department could not be saved. Please, try again.'));
             }
         }
-        $users = $this->Departments->Users->find('list', ['limit' => QUERY_LIMIT]);
+        $users = $this->Departments->Users->find('list', ['limit' => QUERY_LIMIT])->where(['Users.username !=' => 'admin']);
         $this->set(compact('department', 'users'));
         $this->set('_serialize', ['department']);
     }
