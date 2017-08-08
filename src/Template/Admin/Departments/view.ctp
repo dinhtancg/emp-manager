@@ -37,7 +37,7 @@
             ])?>
         	  <?= $this->Form->select('recperpageval',
                     [10=>10, 20=>20, 50=>50],
-                    ['default' => 10, 'onchange'=>'onSelectSubmit("recordsPerPage")']
+                    ['default' => $sessionLimit, 'onchange'=>'onSelectSubmit("recordsPerPage")']
                 )
             ?>
             <?=$this->Form->end()?>
@@ -78,11 +78,11 @@
                     &nbsp;&nbsp;
                     <?php if ($user->isManager($user->id, $department->id)) {
                     ?>
-                    <?= $this->Form->postLink(__('Down'), ['prefix'=>'admin','controller' => 'Departments', 'action' => 'manager', $department->id, $user->id], ['confirm' => __('Are you sure you want to down user # {0}?', $user->username)]) ?>
+                      <?= $this->Form->postLink(__('Down'), ['prefix'=>'admin','controller' => 'Departments', 'action' => 'manager', $department->id, $user->id], ['confirm' => __('Are you sure you want to DOWN user # {0} became EMPLOYEE ?', $user->username)]) ?>
                     <?php
                 } else {
                     ?>
-                    <?= $this->Form->postLink(__('Up'), ['prefix'=>'admin','controller' => 'Departments', 'action' => 'manager', $department->id, $user->id], ['confirm' => __('Are you sure you want to up user # {0}?', $user->username)]) ?>
+                    <?= $this->Form->postLink(__('Up'), ['prefix'=>'admin','controller' => 'Departments', 'action' => 'manager', $department->id, $user->id], ['confirm' => __('Are you sure you want to UP user # {0} became MANAGER?', $user->username)]) ?>
                 <?php
                 } ?>
                 </td>

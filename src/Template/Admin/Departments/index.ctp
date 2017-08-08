@@ -13,7 +13,7 @@
         ])?>
     	<?= $this->Form->select('recperpageval',
                 [10=>10, 20=>20, 50=>50],
-                ['default' => 10, 'onchange'=>'onSelectSubmit("recordsPerPage")']
+                ['default' => $sessionLimit, 'onchange'=>'onSelectSubmit("recordsPerPage")']
             )
         ?>
         <?=$this->Form->end()?>
@@ -21,7 +21,7 @@
     <hr>
     <table cellpadding="0" cellspacing="0">
             <tr>
-                <th><?= $this->Paginator->sort('id') ?></th>
+                <th width="5%"><?= $this->Paginator->sort('id') ?></th>
                 <th><?= $this->Paginator->sort('name') ?></th>
                 <th><?= __('Number Employees')?></th>
                 <th><?= $this->Paginator->sort('created') ?></th>

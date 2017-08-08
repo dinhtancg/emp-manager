@@ -19,15 +19,18 @@ class DepartmentsController extends AppController
      */
     public function index()
     {
-        $limit = LIMIT_PAGINATE;
+        $sessionLimit = $this->request->session()->read('departments.index.limit');
+        $limit = $sessionLimit ? $this->request->session()->read('departments.index.limit') : LIMIT_PAGINATE;
         if ($this->request->is('post')) {
             if (in_array($this->request->data('recperpageval'),
         [10, 20, 50])) {
                 $limit = $this->request->data('recperpageval');
+                $this->request->session()->write('departments.index.limit', $limit);
             }
         }
         $departments = $this->Paginator->paginate($this->Departments, ['limit' =>$limit]);
         $this->set(compact('departments'));
+        $this->set('sessionLimit', $sessionLimit);
         $this->set('_serialize', ['departments']);
     }
 
@@ -40,11 +43,13 @@ class DepartmentsController extends AppController
      */
     public function view($id = null)
     {
-        $limit = LIMIT_PAGINATE;
+        $sessionLimit = $this->request->session()->read('departments.view.limit');
+        $limit = $sessionLimit ? $this->request->session()->read('departments.view.limit') : LIMIT_PAGINATE;
         if ($this->request->is('post')) {
             if (in_array($this->request->data('recperpageval'),
       [10, 20, 50])) {
                 $limit = $this->request->data('recperpageval');
+                $this->request->session()->write('departments.view.limit', $limit);
             }
         }
         $department = TableRegistry::get('Departments')->find()->where(['id'=>$id])->first();
@@ -59,6 +64,7 @@ class DepartmentsController extends AppController
                 return $q->where(['Departments.id' => $department->id]);
             });
             $this->set('department', $department);
+            $this->set('sessionLimit', $sessionLimit);
             $this->set('numEmp', $numEmp);
             $this->set('users', $this->Paginator->paginate($users, ['limit'=> $limit]));
             $this->set('_serialize', ['department']);

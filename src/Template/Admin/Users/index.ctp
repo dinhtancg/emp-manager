@@ -30,7 +30,7 @@
                 <th width="5%">
                   <input type="checkbox" class="checkall"  name="checkall" value="all" />
                 </th>
-                <th><?= $this->Paginator->sort('id') ?></th>
+                <th width="5%"><?= $this->Paginator->sort('id') ?></th>
                 <th><?= $this->Paginator->sort('username') ?></th>
                 <th><?= $this->Paginator->sort('full_name') ?></th>
                 <th><?= $this->Paginator->sort('email') ?></th>

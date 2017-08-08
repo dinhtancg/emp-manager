@@ -49,11 +49,13 @@ class UsersController extends AppController
      */
     public function view($id = null)
     {
-        $limit = LIMIT_PAGINATE;
+        $sessionLimit = $this->request->session()->read('users.view.limit');
+        $limit = $sessionLimit ? $this->request->session()->read('users.view.limit') : LIMIT_PAGINATE;
         if ($this->request->is('post')) {
             if (in_array($this->request->data('recperpageval'),
     [10, 20, 50])) {
                 $limit = $this->request->data('recperpageval');
+                $this->request->session()->write('users.view.limit', $limit);
             }
         }
         $user = TableRegistry::get('Users')->find()->where(['id'=> $id])->first();
@@ -65,6 +67,7 @@ class UsersController extends AppController
                 return $q->where(['Users.id' => $user->id]);
             });
             $this->set('user', $user);
+            $this->set('sessionLimit', $sessionLimit);
             $this->set('departments', $this->Paginator->paginate($departments, ['limit'=> $limit]));
             $this->set('_serialize', ['user']);
         }

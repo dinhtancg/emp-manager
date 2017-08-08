@@ -58,7 +58,7 @@ class UsersTable extends Table
             ->add('username', [
                 'length' => [
                     'rule' => ['minLength', 5],
-                    'message' => 'The password have to be at least 5 characters!',
+                    'message' => 'The username have to be at least 5 characters!',
                 ]
             ]);
 
