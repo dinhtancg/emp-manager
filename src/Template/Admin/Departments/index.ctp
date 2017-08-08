@@ -24,6 +24,7 @@
                 <th width="5%"><?= $this->Paginator->sort('id') ?></th>
                 <th><?= $this->Paginator->sort('name') ?></th>
                 <th><?= __('Number Employees')?></th>
+                <th><?= __('Manager')?></th>
                 <th><?= $this->Paginator->sort('created') ?></th>
                 <th><?= $this->Paginator->sort('modified') ?></th>
                 <th class="actions"><?= __('Actions') ?></th>
@@ -33,6 +34,7 @@
                 <td><?= $this->Number->format($department->id) ?></td>
                 <td><?= $this->Html->link($department->name, ['action' => 'view', $department->id]) ?></td>
                 <td><?= $department->countNumberEmp($department->id)?></td>
+                <td><?= $department->listManager($department->id)?></td>
                 <td><?= h($department->created) ?></td>
                 <td><?= h($department->modified) ?></td>
                 <td class="actions">

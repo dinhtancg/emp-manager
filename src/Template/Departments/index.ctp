@@ -22,12 +22,14 @@
             <tr>
                 <th><?= $this->Paginator->sort('name') ?></th>
                 <th><?= __('Number Employees')?></th>
+                <th><?= __('Manager')?></th>
                 <th><?= $this->Paginator->sort('created') ?></th>
             </tr>
             <?php foreach ($departments as $department): ?>
             <tr>
                 <td><?= $this->Html->link($department->name, ['action' => 'view', $department->id]) ?></td>
                 <td><?= $department->countNumberEmp($department->id) ?></td>
+                <td><?= $department->listManager($department->id)?></td>
                 <td><?= h($department->created) ?></td>
             </tr>
             <?php endforeach; ?>
