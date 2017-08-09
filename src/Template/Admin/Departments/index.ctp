@@ -6,6 +6,12 @@
 </nav>
 <div class="departments index large-9 medium-8 columns content">
     <h3><?= __('Departments') ?></h3>
+    <?php
+     echo $this->Form->create(null, ['type' => 'get']);
+     echo $this->Form->input('search', ['placeholder' =>'Search by Name of Departments ']);
+     echo $this->Form->submit('Search');
+     echo $this->Form->end();
+   ?>
     <div id="recperpage">
         <?=$this->Form->create(null, [
         'url' => ['controller' => 'Departments', 'action' => 'index'],

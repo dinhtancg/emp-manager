@@ -6,6 +6,12 @@
 </nav>
 <div class="users index large-9 medium-8 columns content">
     <h3><?= __('Users') ?></h3>
+    <?php
+     echo $this->Form->create(null, ['type' => 'get']);
+     echo $this->Form->input('search', ['placeholder' =>'Search by username, full_name, email']);
+     echo $this->Form->submit('Search');
+     echo $this->Form->end();
+   ?>
     <div id="recperpage">
         <?=$this->Form->create(null, [
         'url' => ['controller' => 'Users', 'action' => 'index'],
