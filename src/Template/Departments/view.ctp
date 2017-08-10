@@ -19,10 +19,11 @@
         <h4><?= __('Related Employees') ?></h4>
         <div id="recperpage">
             <?=$this->Form->create(null, [
+            'type' => 'get',
             'url' => ['controller' => 'Departments', 'action' => 'view', $department->id],
             'id'  => 'recordsPerPage',
             ])?>
-        	<?= $this->Form->select('recperpageval',
+        	<?= $this->Form->select('limit',
                     [10=>10, 20=>20, 50=>50],
                     ['default' => $sessionLimit, 'onchange'=>'onSelectSubmit("recordsPerPage")']
                 )

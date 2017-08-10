@@ -21,17 +21,14 @@ class DepartmentsController extends AppController
     {
         $sessionLimit = $this->request->session()->read('departments.index.limit');
         $limit = $sessionLimit ? $this->request->session()->read('departments.index.limit') : LIMIT_PAGINATE;
-        if ($this->request->is('post')) {
-            if (in_array($this->request->data('recperpageval'),
-        [10, 20, 50])) {
-                $limit = $this->request->data('recperpageval');
-                $this->request->session()->write('departments.index.limit', $limit);
-            }
+        if (array_key_exists('limit', $this->request->query) && in_array($this->request->query['limit'], [10,20,50])) {
+            $limit = $this->request->query['limit'];
+            $this->request->session()->write('departments.index.limit', $limit);
+            $sessionLimit = $this->request->session()->read('departments.index.limit');
         }
-        if ($this->request->is('get')) {
-            if (!empty($this->request->query) && isset($this->request->query['search'])) {
-                $search_key = trim($this->request->query['search']);
-                $join = [
+        if (isset($this->request->query['search']) && !empty($this->request->query)) {
+            $search_key = trim($this->request->query['search']);
+            $join = [
                   ['table' => 'departments_users',
                     'alias' => 'DepartmentsUsers',
                     'type' => 'INNER',
@@ -43,7 +40,7 @@ class DepartmentsController extends AppController
                     'conditions' => ['Users.id = DepartmentsUsers.user_id']
                   ]
                 ];
-                $conditions= [
+            $conditions= [
                 "OR" => [
                   'Departments.name LIKE' => '%' .$search_key. '%',
                     "AND" => [
@@ -51,18 +48,12 @@ class DepartmentsController extends AppController
                       'DepartmentsUsers.manager' => true
                     ]
                 ]];
-            } else {
-                $conditions = null;
-                $join = null;
-                $search_key =null;
-            }
         } else {
             $conditions = null;
             $join = null;
             $search_key =null;
         }
         $departments = $this->Paginator->paginate($this->Departments, ['conditions'=>$conditions, 'join'=> $join, 'limit' =>$limit, 'group' => 'Departments.name']);
-        // debug($this->_ResultCheck->getDataSource()->getLog());
         $this->set(compact('departments', 'sessionLimit', 'search_key'));
         $this->set('_serialize', ['departments']);
     }
@@ -78,11 +69,11 @@ class DepartmentsController extends AppController
     {
         $sessionLimit = $this->request->session()->read('departments.view.limit');
         $limit = $sessionLimit ? $this->request->session()->read('departments.view.limit') : LIMIT_PAGINATE;
-        if ($this->request->is('post')) {
-            if (in_array($this->request->data('recperpageval'),
-      [10, 20, 50])) {
-                $limit = $this->request->data('recperpageval');
+        if ($this->request->is('get')) {
+            if (array_key_exists('limit', $this->request->query) && in_array($this->request->query['limit'], [10,20,50])) {
+                $limit = $this->request->query['limit'];
                 $this->request->session()->write('departments.view.limit', $limit);
+                $sessionLimit = $this->request->session()->read('departments.view.limit');
             }
         }
         $department = TableRegistry::get('Departments')->find()->where(['id'=>$id])->first();

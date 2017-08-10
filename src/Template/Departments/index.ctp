@@ -7,10 +7,11 @@
     <h3><?= __('Departments') ?></h3>
     <div id="recperpage">
         <?=$this->Form->create(null, [
+          'type' => 'get',
         'url' => ['controller' => 'Departments', 'action' => 'index'],
         'id'  => 'recordsPerPage',
         ])?>
-    	   <?= $this->Form->select('recperpageval',
+    	   <?= $this->Form->select('limit',
                 [10=>10, 20=>20, 50=>50],
                 ['default' => $sessionLimit, 'onchange'=>'onSelectSubmit("recordsPerPage")']
             )
