@@ -72,10 +72,6 @@
               <?php
                 } ?>
                 <td class="actions">
-                    <?= $this->Html->link(__('Edit'), ['controller' => 'Users', 'action' => 'edit', $user->id]) ?>
-                    &nbsp;&nbsp;
-                    <?= $this->Form->postLink(__('Delete'), ['controller' => 'Users', 'action' => 'delete', $user->id], ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]) ?>
-                    &nbsp;&nbsp;
                     <?php if ($user->isManager($user->id, $department->id)) {
                     ?>
                       <?= $this->Form->postLink(__('Down'), ['prefix'=>'admin','controller' => 'Departments', 'action' => 'manager', $department->id, $user->id], ['confirm' => __('Are you sure you want to DOWN user # {0} became EMPLOYEE ?', $user->username)]) ?>

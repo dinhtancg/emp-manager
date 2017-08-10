@@ -28,9 +28,40 @@ class DepartmentsController extends AppController
                 $this->request->session()->write('departments.index.limit', $limit);
             }
         }
-        $departments = $this->Paginator->paginate($this->Departments, ['limit' =>$limit]);
-        $this->set(compact('departments'));
-        $this->set('sessionLimit', $sessionLimit);
+        if ($this->request->is('get')) {
+            if (!empty($this->request->query) && isset($this->request->query)) {
+                $search_key = trim($this->request->query['search']);
+                $join = [
+                  ['table' => 'departments_users',
+                    'alias' => 'DepartmentsUsers',
+                    'type' => 'INNER',
+                    'conditions' => ['Departments.id = DepartmentsUsers.department_id']
+                  ],
+                  ['table' => 'users',
+                    'alias' => 'Users',
+                    'type' => 'INNER',
+                    'conditions' => ['Users.id = DepartmentsUsers.user_id']
+                  ]
+                ];
+                $conditions= [
+                "OR" => [
+                  'Departments.name LIKE' => '%' .$search_key. '%',
+                    "AND" => [
+                      'Users.username LIKE' =>  '%' .$search_key. '%',
+                      'DepartmentsUsers.manager' => true
+                    ]
+                ]];
+            } else {
+                $conditions = null;
+                $join = null;
+            }
+        } else {
+            $conditions = null;
+            $join = null;
+        }
+        $departments = $this->Paginator->paginate($this->Departments, ['conditions'=>$conditions, 'join'=> $join, 'limit' =>$limit, 'group' => 'Departments.name']);
+        // debug($this->_ResultCheck->getDataSource()->getLog());
+        $this->set(compact('departments', 'sessionLimit'));
         $this->set('_serialize', ['departments']);
     }
 
@@ -88,7 +119,7 @@ class DepartmentsController extends AppController
                 $this->Flash->error(__('The department could not be saved. Please, try again.'));
             }
         }
-        $users = $this->Departments->Users->find('list', ['limit' => QUERY_LIMIT]);
+        $users = $this->Departments->Users->find('list');
         $this->set(compact('department', 'users'));
         $this->set('_serialize', ['department']);
     }
@@ -114,7 +145,7 @@ class DepartmentsController extends AppController
                 $this->Flash->error(__('The department could not be saved. Please, try again.'));
             }
         }
-        $users = $this->Departments->Users->find('list', ['limit' => QUERY_LIMIT]);
+        $users = $this->Departments->Users->find('list');
         $this->set(compact('department', 'users'));
         $this->set('_serialize', ['department']);
     }

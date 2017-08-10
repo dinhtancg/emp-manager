@@ -34,8 +34,22 @@ class UsersController extends AppController
                 $this->request->session()->write('users.index.limit', $limit);
             }
         }
-
-        $users = $this->Paginator->paginate($this->Users, ['limit' =>$limit]);
+        if ($this->request->is('get')) {
+            if (!empty($this->request->query) && isset($this->request->query)) {
+                $search_key = trim($this->request->query['search']);
+                $conditions= [
+                "OR" => [
+                  'username LIKE' => '%' .$search_key. '%',
+                  'email LIKE' => '%' . $search_key . '%',
+                  'full_name LIKE' => '%' . $search_key . '%'
+                ]];
+            } else {
+                $conditions = null;
+            }
+        } else {
+            $conditions = null;
+        }
+        $users = $this->Paginator->paginate($this->Users, ['conditions' => $conditions, 'limit' =>$limit]);
         $this->set(compact('users', 'sessionLimit'));
         $this->set('_serialize', ['users']);
     }

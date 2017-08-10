@@ -10,8 +10,12 @@
         <legend><?= __('Add Department') ?></legend>
         <?php
             echo $this->Form->input('name');
-            echo $this->Form->input('users._ids', ['options' => $users,'multiple'=>'checkbox']);
         ?>
+        <h5>Search</h5>
+        <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for usernames..">
+        <div id="" style="overflow:scroll; height:400px;">
+          <?php echo $this->Form->input('users._ids', ['options' => $users,'multiple'=>'checkbox']); ?>
+        </div>
         <input type="checkbox" class="checkall" />
         <label for="checkall" style="color:red">Sellect All Users</label>
     </fieldset>
