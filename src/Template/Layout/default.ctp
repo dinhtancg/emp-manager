@@ -77,7 +77,7 @@ $cakeDescription = 'Employees Management System ';
             <ul class="right">
               <?php if ($this->request->session()->read('Auth.User.id')): ?>
                 <li>
-                    <?= $this->Html->link($this->request->session()->read('Auth.User.username'), ['prefix'=> false, 'controller' => 'Users','action'=> 'index'], ['class' => 'btn']) ?>
+                    <?= $this->Html->link($this->request->session()->read('Auth.User.full_name'), ['prefix'=> false, 'controller' => 'Users','action'=> 'index'], ['class' => 'btn']) ?>
                     <div class="dropdown-content">
                       <?= $this->Html->link('Edit Profile', [ 'prefix' => false, 'controller'=>'Users', 'action'=>'edit', $this->request->session()->read('Auth.User.id')]) ?>
                       <?= $this->Html->link('Change Password', ['controller'=>'Users', 'action'=>'changePassword', 'prefix' => false]) ?>

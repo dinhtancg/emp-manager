@@ -35,7 +35,7 @@ class UsersController extends AppController
             }
         }
         if ($this->request->is('get')) {
-            if (!empty($this->request->query) && isset($this->request->query)) {
+            if (!empty($this->request->query) && isset($this->request->query['search'])) {
                 $search_key = trim($this->request->query['search']);
                 $conditions= [
                 "OR" => [
@@ -45,12 +45,14 @@ class UsersController extends AppController
                 ]];
             } else {
                 $conditions = null;
+                $search_key =null;
             }
         } else {
             $conditions = null;
+            $search_key= null;
         }
         $users = $this->Paginator->paginate($this->Users, ['conditions' => $conditions, 'limit' =>$limit]);
-        $this->set(compact('users', 'sessionLimit'));
+        $this->set(compact('users', 'sessionLimit', 'search_key'));
         $this->set('_serialize', ['users']);
     }
 

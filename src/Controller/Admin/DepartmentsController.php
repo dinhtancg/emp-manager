@@ -29,7 +29,7 @@ class DepartmentsController extends AppController
             }
         }
         if ($this->request->is('get')) {
-            if (!empty($this->request->query) && isset($this->request->query)) {
+            if (!empty($this->request->query) && isset($this->request->query['search'])) {
                 $search_key = trim($this->request->query['search']);
                 $join = [
                   ['table' => 'departments_users',
@@ -54,14 +54,16 @@ class DepartmentsController extends AppController
             } else {
                 $conditions = null;
                 $join = null;
+                $search_key =null;
             }
         } else {
             $conditions = null;
             $join = null;
+            $search_key =null;
         }
         $departments = $this->Paginator->paginate($this->Departments, ['conditions'=>$conditions, 'join'=> $join, 'limit' =>$limit, 'group' => 'Departments.name']);
         // debug($this->_ResultCheck->getDataSource()->getLog());
-        $this->set(compact('departments', 'sessionLimit'));
+        $this->set(compact('departments', 'sessionLimit', 'search_key'));
         $this->set('_serialize', ['departments']);
     }
 

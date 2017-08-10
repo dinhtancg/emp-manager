@@ -8,7 +8,7 @@
     <h3><?= __('Departments') ?></h3>
     <?php
      echo $this->Form->create(null, ['type' => 'get']);
-     echo $this->Form->input('search', ['placeholder' =>'Search by Name of Departments ']);
+     echo $this->Form->input('search', ['placeholder' =>'Search by Name of Departments','value' => ($search_key) ? $search_key : '']);
      echo $this->Form->submit('Search');
      echo $this->Form->end();
    ?>
