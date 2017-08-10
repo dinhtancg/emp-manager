@@ -38,8 +38,6 @@ class UsersTable extends Table
             'targetForeignKey' => 'department_id',
             'joinTable' => 'departments_users'
         ]);
-        
-        $this->hasMany('DepartmentsUsers');
     }
 
         /**

@@ -52,19 +52,19 @@ function onSelectSubmit(frmid)
  }
  function myFunction() {
      // Declare variables
-     var input, filter, ul, li, a, i;
+     var input, filter, checkbox, a, i;
      input = document.getElementById('myInput');
      filter = input.value.toUpperCase();
 
-     li = document.getElementsByClassName('checkbox');
+     checkbox = document.getElementsByClassName('checkbox');
 
      // Loop through all list items, and hide those who don't match the search query
      for (i = 0; i < li.length; i++) {
-         a = li[i].getElementsByTagName("label")[0];
+         a = checkbox[i].getElementsByTagName("label")[0];
          if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
-             li[i].style.display = "";
+             checkbox[i].style.display = "";
          } else {
-             li[i].style.display = "none";
+             checkbox[i].style.display = "none";
          }
      }
  }
