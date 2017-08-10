@@ -6,24 +6,23 @@
 </nav>
 <div class="departments index large-9 medium-8 columns content">
     <h3><?= __('Departments') ?></h3>
-    <?php
-     echo $this->Form->create(null, ['type' => 'get']);
-     echo $this->Form->input('search', ['placeholder' =>'Search by Name of Departments','value' => ($search_key) ? $search_key : '']);
-     echo $this->Form->submit('Search');
-     echo $this->Form->end();
-   ?>
+    <?= $this->Form->create(null, [
+           'type' => 'get',
+           'url' => ['controller' => 'Departments', 'action' => 'index'],
+           'id'  => 'recordsPerPage',
+         ]); ?>
+     <?= $this->Form->input('search', ['placeholder' => 'Search by username, full_name, email', 'value' => ($search_key) ? $search_key : '']); ?>
+     <?= $this->Form->submit('Search'); ?>
     <div id="recperpage">
-        <?=$this->Form->create(null, [
-        'url' => ['controller' => 'Departments', 'action' => 'index'],
-        'id'  => 'recordsPerPage',
-        ])?>
-    	<?= $this->Form->select('recperpageval',
-                [10=>10, 20=>20, 50=>50],
-                ['default' => $sessionLimit, 'onchange'=>'onSelectSubmit("recordsPerPage")']
-            )
+      	<?= $this->Form->select('limit',
+                  [10=>10, 20=>20, 50=>50],
+                  ['default' => $sessionLimit,
+                   'onchange'=>'onSelectSubmit("recordsPerPage")'
+                  ])
         ?>
-        <?=$this->Form->end()?>
-    </div>
+
+      </div>
+    <?=$this->Form->end()?>
     <hr>
     <table cellpadding="0" cellspacing="0">
             <tr>

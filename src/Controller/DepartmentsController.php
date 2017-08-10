@@ -27,11 +27,11 @@ class DepartmentsController extends AppController
     {
         $sessionLimit = $this->request->session()->read('departments.index.limit');
         $limit = $sessionLimit ? $this->request->session()->read('departments.index.limit') : LIMIT_PAGINATE;
-        if ($this->request->is('post')) {
-            if (in_array($this->request->data('recperpageval'),
-        [10, 20, 50])) {
-                $limit = $this->request->data('recperpageval');
+        if ($this->request->is('get')) {
+            if (array_key_exists('limit', $this->request->query) && in_array($this->request->query['limit'], [10,20,50])) {
+                $limit = $this->request->query['limit'];
                 $this->request->session()->write('departments.index.limit', $limit);
+                $sessionLimit = $this->request->session()->read('departments.index.limit');
             }
         }
         $departments = $this->Paginator->paginate($this->Departments, ['limit' =>$limit]);
@@ -51,11 +51,11 @@ class DepartmentsController extends AppController
      {
          $sessionLimit = $this->request->session()->read('departments.view.limit');
          $limit = $sessionLimit ? $this->request->session()->read('departments.view.limit') : LIMIT_PAGINATE;
-         if ($this->request->is('post')) {
-             if (in_array($this->request->data('recperpageval'),
-       [10, 20, 50])) {
-                 $limit = $this->request->data('recperpageval');
+         if ($this->request->is('get')) {
+             if (array_key_exists('limit', $this->request->query) && in_array($this->request->query['limit'], [10,20,50])) {
+                 $limit = $this->request->query['limit'];
                  $this->request->session()->write('departments.view.limit', $limit);
+                 $sessionLimit = $this->request->session()->read('departments.view.limit');
              }
          }
          $department = TableRegistry::get('Departments')->find()->where(['id'=>$id])->first();

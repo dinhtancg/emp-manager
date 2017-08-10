@@ -25,31 +25,22 @@ class UsersController extends AppController
     {
         $sessionLimit = $this->request->session()->read('users.index.limit');
         $limit = $sessionLimit ? $this->request->session()->read('users.index.limit') : LIMIT_PAGINATE;
-        if ($this->request->is('post')) {
-            // debug($this->request->data);
-            // die;
-            if (in_array($this->request->data('recperpageval'),
-      [10, 20, 50])) {
-                $limit = $this->request->data('recperpageval');
-                $this->request->session()->write('users.index.limit', $limit);
-            }
+        if (array_key_exists('limit', $this->request->query) && in_array($this->request->query['limit'], [10,20,50])) {
+            $limit = $this->request->query['limit'];
+            $this->request->session()->write('users.index.limit', $limit);
+            $sessionLimit = $this->request->session()->read('users.index.limit');
         }
-        if ($this->request->is('get')) {
-            if (!empty($this->request->query) && isset($this->request->query['search'])) {
-                $search_key = trim($this->request->query['search']);
-                $conditions= [
+        if (isset($this->request->query['search']) && !empty($this->request->query)) {
+            $search_key = trim($this->request->query['search']);
+            $conditions= [
                 "OR" => [
                   'username LIKE' => '%' .$search_key. '%',
                   'email LIKE' => '%' . $search_key . '%',
                   'full_name LIKE' => '%' . $search_key . '%'
                 ]];
-            } else {
-                $conditions = null;
-                $search_key =null;
-            }
         } else {
             $conditions = null;
-            $search_key= null;
+            $search_key =null;
         }
         $users = $this->Paginator->paginate($this->Users, ['conditions' => $conditions, 'limit' =>$limit]);
         $this->set(compact('users', 'sessionLimit', 'search_key'));
@@ -67,11 +58,11 @@ class UsersController extends AppController
     {
         $sessionLimit = $this->request->session()->read('users.view.limit');
         $limit = $sessionLimit ? $this->request->session()->read('users.view.limit') : LIMIT_PAGINATE;
-        if ($this->request->is('post')) {
-            if (in_array($this->request->data('recperpageval'),
-    [10, 20, 50])) {
-                $limit = $this->request->data('recperpageval');
+        if ($this->request->is('get')) {
+            if (array_key_exists('limit', $this->request->query) && in_array($this->request->query['limit'], [10,20,50])) {
+                $limit = $this->request->query['limit'];
                 $this->request->session()->write('users.view.limit', $limit);
+                $sessionLimit = $this->request->session()->read('users.view.limit');
             }
         }
         $user = TableRegistry::get('Users')->find()->where(['id'=> $id])->first();

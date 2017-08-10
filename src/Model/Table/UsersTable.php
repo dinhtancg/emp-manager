@@ -100,7 +100,13 @@ class UsersTable extends Table
               ]);
         $validator
                     ->requirePresence('avatar', 'create')
-                    ->notEmpty('avatar', 'You must choose your avatar!', 'create');
+                    ->notEmpty('avatar', 'You must choose your avatar!', 'create')
+                    ->add('avatar', [
+                      'validExtension' => [
+                          'rule' => ['extension',['gif', 'jpeg', 'png', 'jpg']],
+                          'message' => 'These files extension are allowed: gif, jpeg, png, jpg',
+                      ]
+    ]);
         $validator
             ->requirePresence('role', 'create')
             ->notEmpty('role')

@@ -34,12 +34,13 @@
           <h4><?= __('Related Departments') ?></h4>
           <div id="recperpage">
               <?=$this->Form->create(null, [
+              'type' => 'get',
               'url' => ['controller' => 'Users', 'action' => 'view', $user->id],
               'id'  => 'recordsPerPage',
               ])?>
-          	  <?= $this->Form->select('recperpageval',
+          	  <?= $this->Form->select('limit',
                       [10=>10, 20=>20, 50=>50],
-                      ['default' => 10, 'onchange'=>'onSelectSubmit("recordsPerPage")']
+                      ['default' => $sessionLimit, 'onchange'=>'onSelectSubmit("recordsPerPage")']
                   )
               ?>
               <?=$this->Form->end()?>
